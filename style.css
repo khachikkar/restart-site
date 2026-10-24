@@ -776,3 +776,20 @@ footer {
   font-weight: 700;
   line-height: 1.2;
 }
+
+
+
+
+
+.product-card .product-img-wrapper {
+  height: auto;
+  overflow: visible;
+}
+
+.product-card .product-img-wrapper > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+}
