@@ -264,10 +264,25 @@ body {
   color: #111;
 }
 
+/* Ապրանքների բաժինը դուրս է գալիս ընդհանուր 1200px container սահմանափակումից */
+.products-section.container {
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  padding: 20px clamp(16px, 3vw, 48px) 50px;
+}
+
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+/* 4 կամ ավելի քարտի դեպքում լայն էկրանին ցուցադրում է 4 սյուն */
+@media (min-width: 1201px) {
+  .products-grid:has(> .product-card:nth-child(4)) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .product-card {
@@ -301,9 +316,9 @@ body {
 
 .product-card img {
   width: 100%;
-  height: 320px; 
-  object-fit: cover; 
-  background: #f8f9fa;
+  height: clamp(190px, 22vw, 320px);
+  object-fit: contain;
+  background: #fff;
   border-radius: 6px;
   margin-bottom: 12px;
 }
@@ -454,6 +469,7 @@ footer {
 @media (max-width: 768px) {
   .float-call-btn {
     display: block;
+       bottom: 85px;
   }
   .header-call-btn {
     display: none;
@@ -598,5 +614,34 @@ footer {
 
   .benefit-item p {
     font-size: 13px;
+  }
+}
+
+/* Ապրանքների grid-ի responsive դասավորություն */
+@media (max-width: 1200px) {
+  .products-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .product-card {
+    min-width: 0;
+    padding: 12px;
+  }
+
+  .product-card img {
+    height: 190px;
+  }
+}
+
+@media (max-width: 380px) {
+  .products-grid {
+    grid-template-columns: 1fr;
   }
 }
