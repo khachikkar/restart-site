@@ -82,18 +82,29 @@ function renderProducts(categoryFilter) {
     section.items.forEach(p => {
       const card = document.createElement('div');
       card.className = 'product-card';
-      card.innerHTML = `
-        <div class="product-img-wrapper">
-          ${getBadgeHtml(p.badge)}
-          <img src="${p.image_url}" alt="${p.title}">
-        </div>
-        <h4>${p.title}</h4>
-        <div class="price-box">
-          ${p.old_price ? `<span class="old-price">${p.old_price}</span>` : ''}
-          <span class="price">${p.price}</span>
-        </div>
-        <a href="tel:098206064" class="call-to-buy-btn">Զանգել / Գնել</a>
-      `;
+  const brandLogoHtml = p.brand_logo
+  ? `<div class="product-brand-logo">
+       <img src="${p.brand_logo}" alt="${p.brand || 'Բրենդի լոգո'}" loading="lazy">
+     </div>`
+  : '';
+
+card.innerHTML = `
+  ${brandLogoHtml}
+
+  <div class="product-img-wrapper">
+    ${getBadgeHtml(p.badge)}
+    <img src="${p.image_url}" alt="${p.title}" loading="lazy">
+  </div>
+
+  <h4>${p.title}</h4>
+
+  <div class="price-box">
+    ${p.old_price ? `<span class="old-price">${p.old_price}</span>` : ''}
+    <span class="price">${p.price}</span>
+  </div>
+
+  <a href="tel:098206064" class="call-to-buy-btn">Զանգել / Գնել</a>
+`;
       grid.appendChild(card);
     });
 
