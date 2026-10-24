@@ -14,8 +14,8 @@
     "description": "Որակյալ սպասարկում և երաշխիք քո տանը",
     "button_text": "Տեսնել ապրանքները",
     "button_link": "#products",
-    "image_url": "assets/hero-banner-web.png",
-    "mobile_image_url": "assets/hero-banner-mob.png"
+    "image_url": "assets/hero-banner-web-general.png",
+    "mobile_image_url": "assets/hero-banner-general.png"
   },
 
   "product_sections": [
@@ -31,7 +31,8 @@
           "image_url": "assets/washing/washing-1.png",
           "badge": "sale",
             "brand": "Samsung",
-  "brand_logo": "assets/brands/beko.svg"
+  "brand_logo": "assets/brands/beko.svg",
+  "condition": "new"
           
         },
         {
@@ -42,7 +43,8 @@
          "image_url": "assets/washing/washing-1.png",
           "badge": "new_item",
                       "brand": "Samsung",
-  "brand_logo": "assets/brands/samsung.svg"
+  "brand_logo": "assets/brands/samsung.svg",
+    "condition": "used"
         },
         {
           "id": 103,
@@ -52,7 +54,8 @@
           "image_url": "assets/washing/washing-1.png",
           "badge": "new",
                       "brand": "Samsung",
-  "brand_logo": "assets/brands/lg.svg"
+  "brand_logo": "assets/brands/lg.svg",
+    "condition": "used"
         }
       ]
     },
@@ -69,7 +72,8 @@
         "image_url": "assets/refregirators/refrejirator-1.png",
           "badge": "new",
                       "brand": "Samsung",
-  "brand_logo": "assets/brands/samsung.svg"
+  "brand_logo": "assets/brands/samsung.svg",
+    "condition": "used"
         },
         {
           "id": 202,
@@ -79,7 +83,8 @@
          "image_url": "assets/refregirators/refrejirator-1.png",
           "badge": "special",
                       "brand": "Samsung",
-  "brand_logo": "assets/brands/samsung.svg"
+  "brand_logo": "assets/brands/samsung.svg",
+    "condition": "used"
         },
         {
           "id": 203,
@@ -89,7 +94,8 @@
           "image_url": "assets/refregirators/refrejirator-1.png",
           "badge": "new_item",
                       "brand": "Samsung",
-  "brand_logo": "assets/brands/samsung.svg"
+  "brand_logo": "assets/brands/samsung.svg",
+    "condition": "used"
         }
       ]
     },
@@ -106,7 +112,8 @@
           "image_url": "assets/dishwash/dishwash-1.png",
           "badge": "sold_out",
                       "brand": "Samsung",
-  "brand_logo": "assets/brands/hisense.svg"
+  "brand_logo": "assets/brands/hisense.svg",
+    "condition": "used"
         },
         {
           "id": 39,
@@ -116,7 +123,8 @@
            "image_url": "assets/dishwash/dishwash-1.png",
           "badge": "special",
                       "brand": "Samsung",
-  "brand_logo": "assets/brands/samsung.svg"
+  "brand_logo": "assets/brands/samsung.svg",
+    "condition": "used"
         },
         {
           "id": 303,
@@ -126,7 +134,8 @@
          "image_url": "assets/dishwash/dishwash-1.png",
           "badge": "new",
                       "brand": "Samsung",
-  "brand_logo": "assets/brands/samsung.svg"
+  "brand_logo": "assets/brands/samsung.svg",
+    "condition": "used"
         }
       ]
     },
@@ -143,7 +152,8 @@
           "image_url": "assets/spare/sp-1.png",
           "badge": "urgent",
                       "brand": "Samsung",
-  "brand_logo": "assets/brands/samsung.svg"
+  "brand_logo": "assets/brands/samsung.svg",
+    "condition": "used"
         },
         {
           "id": 402,
@@ -153,7 +163,8 @@
            "image_url": "assets/spare/sp-1.png",
           "badge": "sale",
                       "brand": "Samsung",
-  "brand_logo": "assets/brands/samsung.svg"
+  "brand_logo": "assets/brands/samsung.svg",
+    "condition": "new"
         },
         {
           "id": 403,
@@ -163,7 +174,8 @@
            "image_url": "assets/spare/sp-1.png",
           "badge": "new",
                       "brand": "Samsung",
-  "brand_logo": "assets/brands/samsung.svg"
+  "brand_logo": "assets/brands/samsung.svg",
+    "condition": "used"
         }
       ]
     }

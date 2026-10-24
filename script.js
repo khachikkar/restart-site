@@ -8,37 +8,50 @@ const subcategoryOrder = [
   "Պահեստամասեր"
 ];
 
+const conditionLabels = {
+  new: "Նոր",
+  used: "Օգտագործված"
+};
+
 async function loadData() {
   try {
-    const jsonUrl = new URL('data.json', window.location.href).href;
+    const jsonUrl = new URL("data.json", window.location.href).href;
     const response = await fetch(jsonUrl);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
-    
+
     badgeOptions = data.badge_options || {};
     allSections = data.product_sections || [];
 
     renderBanner(data.banner);
-    renderProducts('all');
+    renderProducts("all");
   } catch (error) {
-    console.error('Error loading data.json:', error);
+    console.error("Error loading data.json:", error);
   }
 }
 
 // Մոբայլ մենյուի բացման / փակման ֆունկցիա
 function toggleMobileMenu() {
-  const dropdown = document.getElementById('mobile-dropdown');
+  const dropdown = document.getElementById("mobile-dropdown");
+
   if (dropdown) {
-    dropdown.classList.toggle('active');
+    dropdown.classList.toggle("active");
   }
 }
 
 function renderBanner(banner) {
-  const container = document.getElementById('hero-container');
+  const container = document.getElementById("hero-container");
   if (!container || !banner) return;
 
   const isMobile = window.innerWidth <= 768;
-  const bgImage = (isMobile && banner.mobile_image_url) ? banner.mobile_image_url : banner.image_url;
+  const bgImage =
+    isMobile && banner.mobile_image_url
+      ? banner.mobile_image_url
+      : banner.image_url;
 
   container.innerHTML = `
     <div class="hero-image" style="background-image: url('${bgImage}');"></div>
@@ -51,60 +64,88 @@ function renderBanner(banner) {
 }
 
 function getBadgeHtml(badgeKey) {
-  if (!badgeKey || !badgeOptions[badgeKey]) return '';
-  const b = badgeOptions[badgeKey];
-  return `<span class="product-badge" style="background-color: ${b.bg_color};">${b.text}</span>`;
+  if (!badgeKey || !badgeOptions[badgeKey]) return "";
+
+  const badge = badgeOptions[badgeKey];
+
+  return `
+    <span class="product-badge" style="background-color: ${badge.bg_color};">
+      ${badge.text}
+    </span>
+  `;
 }
 
 function renderProducts(categoryFilter) {
-  const container = document.getElementById('products-container');
+  const container = document.getElementById("products-container");
   if (!container) return;
-  container.innerHTML = '';
+
+  container.innerHTML = "";
 
   allSections.forEach(section => {
-    if (categoryFilter !== 'all' && section.category_key !== categoryFilter) {
+    if (categoryFilter !== "all" && section.category_key !== categoryFilter) {
       return;
     }
 
     if (!section.items || section.items.length === 0) return;
 
-    const groupDiv = document.createElement('div');
-    groupDiv.className = 'category-group';
+    const groupDiv = document.createElement("div");
+    groupDiv.className = "category-group";
 
-    const subcatTitle = document.createElement('h3');
-    subcatTitle.className = 'sub-category-title';
+    const subcatTitle = document.createElement("h3");
+    subcatTitle.className = "sub-category-title";
     subcatTitle.innerText = section.subcategory;
     groupDiv.appendChild(subcatTitle);
 
-    const grid = document.createElement('div');
-    grid.className = 'products-grid';
+    const grid = document.createElement("div");
+    grid.className = "products-grid";
 
     section.items.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-  const brandLogoHtml = p.brand_logo
-  ? `<div class="product-brand-logo">
-       <img src="${p.brand_logo}" alt="${p.brand || 'Բրենդի լոգո'}" loading="lazy">
-     </div>`
-  : '';
+      const card = document.createElement("div");
+      card.className = "product-card";
 
-card.innerHTML = `
-  ${brandLogoHtml}
+      const brandLogoHtml = p.brand_logo
+        ? `
+          <div class="product-brand-logo">
+            <img
+              src="${p.brand_logo}"
+              alt="${p.brand || "Բրենդի լոգո"}"
+              loading="lazy"
+            >
+          </div>
+        `
+        : "";
 
-  <div class="product-img-wrapper">
-    ${getBadgeHtml(p.badge)}
-    <img src="${p.image_url}" alt="${p.title}" loading="lazy">
-  </div>
+      const conditionText = conditionLabels[p.condition] || "";
+      const conditionHtml = conditionText
+        ? `<span class="product-condition">${conditionText}</span>`
+        : "";
 
-  <h4>${p.title}</h4>
+      card.innerHTML = `
+        ${brandLogoHtml}
 
-  <div class="price-box">
-    ${p.old_price ? `<span class="old-price">${p.old_price}</span>` : ''}
-    <span class="price">${p.price}</span>
-  </div>
+        <div class="product-img-wrapper">
+          ${getBadgeHtml(p.badge)}
+          <img src="${p.image_url}" alt="${p.title}" loading="lazy">
+        </div>
 
-  <a href="tel:098206064" class="call-to-buy-btn">Զանգել / Գնել</a>
-`;
+        ${conditionHtml}
+
+        <h4>${p.title}</h4>
+
+        <div class="price-box">
+          ${
+            p.old_price
+              ? `<span class="old-price">${p.old_price}</span>`
+              : ""
+          }
+          <span class="price">${p.price}</span>
+        </div>
+
+        <a href="tel:098206064" class="call-to-buy-btn">
+          Զանգել / Գնել
+        </a>
+      `;
+
       grid.appendChild(card);
     });
 
@@ -113,10 +154,16 @@ card.innerHTML = `
   });
 }
 
-function filterCategory(cat, event) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  if (event) event.target.classList.add('active');
-  renderProducts(cat);
+function filterCategory(category, event) {
+  document.querySelectorAll(".tab-btn").forEach(button => {
+    button.classList.remove("active");
+  });
+
+  if (event) {
+    event.target.classList.add("active");
+  }
+
+  renderProducts(category);
 }
 
 loadData();

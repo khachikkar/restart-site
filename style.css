@@ -760,3 +760,19 @@ footer {
     max-height: 28px;
   }
 }
+
+
+.product-condition {
+  position: static;
+  display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
+  margin: 10px 0 8px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: #111;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
