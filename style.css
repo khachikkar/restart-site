@@ -469,7 +469,7 @@ footer {
 @media (max-width: 768px) {
   .float-call-btn {
     display: block;
-       bottom: 85px;
+
   }
   .header-call-btn {
     display: none;
