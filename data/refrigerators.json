@@ -1,0 +1,52 @@
+[
+  {
+    "category_key": "techniqua",
+    "subcategory": "Սառնարաններ",
+    "items": [
+      {
+        "id": 5,
+        "title": "Սառնարան No Frost",
+        "price": "280,000 դր",
+        "old_price": "310,000 դր",
+        "image_url": "assets/refregirators/refrejirator-1.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/samsung.svg",
+        "condition": "used"
+      },
+      {
+        "id": 55,
+        "title": "Սառնարան No Frost",
+        "price": "280,000 դր",
+        "old_price": "310,000 դր",
+        "image_url": "assets/refregirators/refrejirator-1.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/samsung.svg",
+        "condition": "used"
+      },
+      {
+        "id": 202,
+        "title": "Երկխորշ Սառնարան Samsung Side-by-Side",
+        "price": "450,000 դր",
+        "old_price": "500,000 դր",
+        "image_url": "assets/refregirators/refrejirator-1.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/samsung.svg",
+        "condition": "used"
+      },
+      {
+        "id": 203,
+        "title": "Սառնարան LG Total No Frost",
+        "price": "340,000 դր",
+        "old_price": "",
+        "image_url": "assets/refregirators/refrejirator-1.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/samsung.svg",
+        "condition": "used"
+      }
+    ]
+  }
+]

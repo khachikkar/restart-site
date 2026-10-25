@@ -25,7 +25,21 @@ async function loadData() {
     const data = await response.json();
 
     badgeOptions = data.badge_options || {};
-    allSections = data.product_sections || [];
+
+    const productFiles = data.product_data_files || [];
+    const sectionGroups = await Promise.all(
+      productFiles.map(async filePath => {
+        const productResponse = await fetch(new URL(filePath, window.location.href));
+
+        if (!productResponse.ok) {
+          throw new Error(`Could not load ${filePath}: HTTP ${productResponse.status}`);
+        }
+
+        const productData = await productResponse.json();
+        return Array.isArray(productData) ? productData : [productData];
+      })
+    );
+    allSections = sectionGroups.flat();
 
     renderBanner(data.banner);
     renderProducts("all");

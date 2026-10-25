@@ -1,0 +1,41 @@
+[
+  {
+    "category_key": "spare_parts",
+    "subcategory": "Պահեստամասեր",
+    "items": [
+      {
+        "id": 4,
+        "title": "Պոլպնակ (Pomp) լվացքի մեքենայի",
+        "price": "8,000 դր",
+        "old_price": "10,000 դր",
+        "image_url": "assets/spare/sp-1.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/samsung.svg",
+        "condition": "used"
+      },
+      {
+        "id": 402,
+        "title": "Տաքացուցիչ (ТЭН) լվացքի մեքենայի",
+        "price": "6,500 դր",
+        "old_price": "8,000 դր",
+        "image_url": "assets/spare/sp-1.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/samsung.svg",
+        "condition": "new"
+      },
+      {
+        "id": 403,
+        "title": "Սառնարանի թերմոստատ",
+        "price": "5,000 դր",
+        "old_price": "",
+        "image_url": "assets/spare/sp-1.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/samsung.svg",
+        "condition": "used"
+      }
+    ]
+  }
+]

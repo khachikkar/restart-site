@@ -1,0 +1,52 @@
+[
+  {
+    "category_key": "techniqua",
+    "subcategory": "Սպասք լվալու մեքենաներ",
+    "items": [
+      {
+        "id": 3,
+        "title": "Սպասք լվացող մեքենա Bosch",
+        "price": "195,000 դր",
+        "old_price": "",
+        "image_url": "assets/dishwash/dishwash-1.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/hisense.svg",
+        "condition": "used"
+      },
+      {
+        "id": 39,
+        "title": "դֆդֆ մեքենա Bosch",
+        "price": "195,000 դր",
+        "old_price": "",
+        "image_url": "assets/dishwash/dishwash-1.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/samsung.svg",
+        "condition": "used"
+      },
+      {
+        "id": 303,
+        "title": "Սպասք լվացող մեքենա Siemens",
+        "price": "240,000 դր",
+        "old_price": "270,000 դր",
+        "image_url": "assets/dishwash/dishwash-autumn.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/samsung.svg",
+        "condition": "used"
+      },
+      {
+        "id": 33,
+        "title": "Սպասք լվացող մեքենա Siemens",
+        "price": "240,000 դր",
+        "old_price": "270,000 դր",
+        "image_url": "assets/dishwash/dishwash-autumn.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/samsung.svg",
+        "condition": "used"
+      }
+    ]
+  }
+]

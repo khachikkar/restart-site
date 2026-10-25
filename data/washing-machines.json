@@ -1,0 +1,96 @@
+[
+  {
+    "category_key": "techniqua",
+    "subcategory": "Լվացքի մեքենաներ",
+    "items": [
+      {
+        "id": 1,
+        "title": "Լվացքի մեքենա Samsung",
+        "price": "180,000 դր",
+        "old_price": "210,000 դր",
+        "image_url": "assets/washing/washing-autumn.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/beko.svg",
+        "condition": "new"
+      },
+      {
+        "id": 11,
+        "title": "Լվացքի մեքենա Samsung",
+        "price": "180,000 դր",
+        "old_price": "210,000 դր",
+        "image_url": "assets/washing/washing-autumn.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/beko.svg",
+        "condition": "new"
+      },
+      {
+        "id": 12,
+        "title": "Լվացքի մեքենա Samsung",
+        "price": "180,000 դր",
+        "old_price": "210,000 դր",
+        "image_url": "assets/washing/washing-autumn.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/beko.svg",
+        "condition": "new"
+      },
+      {
+        "id": 2,
+        "title": "Լվացքի մեքենա LG AI DD",
+        "price": "220,000 դր",
+        "old_price": "",
+        "image_url": "assets/washing/washing-1.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/samsung.svg",
+        "condition": "used"
+      },
+      {
+        "id": 103,
+        "title": "Լվացքի մեքենա Bosch Serie 6",
+        "price": "245,000 դր",
+        "old_price": "270,000 դր",
+        "image_url": "assets/washing/washing-1.png",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/lg.svg",
+        "condition": "used"
+      },
+      {
+        "id": 104,
+        "title": "Լվացքի մեքենա Samsung 5kg",
+        "price": "40,000 դր",
+        "old_price": "60,000 դր",
+        "image_url": "assets/washing/samsung-5kg-used.jpg",
+        "badge": "sale",
+        "brand": "Samsung",
+        "brand_logo": "assets/brands/samsung.svg",
+        "condition": "used"
+      },
+      {
+        "id": 105,
+        "title": "Լվացքի մեքենա Hisense 7kg",
+        "price": "70,000 դր",
+        "old_price": "90,000 դր",
+        "image_url": "assets/washing/hisense-7kg-used.jpg",
+        "badge": "sale",
+        "brand": "Hisense",
+        "brand_logo": "assets/brands/hisense.svg",
+        "condition": "used"
+      },
+      {
+        "id": 106,
+        "title": "Լվացքի մեքենա Indesit 7kg",
+        "price": "140,000 դր",
+        "old_price": "",
+        "image_url": "assets/washing/indesit-7kg-new.jpg",
+        "badge": "sale",
+        "brand": "Indesit",
+        "brand_logo": "assets/brands/indesit.svg",
+        "condition": "new"
+      }
+    ]
+  }
+]
