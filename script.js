@@ -135,25 +135,27 @@ function renderProducts(categoryFilter) {
         : "";
 
       card.innerHTML = `
-        ${brandLogoHtml}
+        <a class="product-card-detail-link" href="product.html?id=${encodeURIComponent(p.id)}">
+          ${brandLogoHtml}
 
-        <div class="product-img-wrapper">
-          ${getBadgeHtml(p.badge)}
-          <img src="${p.image_url}" alt="${p.title}" loading="lazy">
-        </div>
+          <div class="product-img-wrapper">
+            ${getBadgeHtml(p.badge)}
+            <img src="${p.image_url}" alt="${p.title}" loading="lazy">
+          </div>
 
-        ${conditionHtml}
+          ${conditionHtml}
 
-        <h4>${p.title}</h4>
+          <h4>${p.title}</h4>
 
-        <div class="price-box">
-          ${
-            p.old_price
-              ? `<span class="old-price">${p.old_price}</span>`
-              : ""
-          }
-          <span class="price">${p.price}</span>
-        </div>
+          <div class="price-box">
+            ${
+              p.old_price
+                ? `<span class="old-price">${p.old_price}</span>`
+                : ""
+            }
+            <span class="price">${p.price}</span>
+          </div>
+        </a>
 
         <a href="tel:098206064" class="call-to-buy-btn">
           Զանգել / Գնել
