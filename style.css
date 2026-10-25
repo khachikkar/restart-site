@@ -957,19 +957,36 @@ footer {
   }
 
   .product-detail-info {
+    align-items: center;
     padding: 2px 0;
+    text-align: center;
+  }
+
+  .product-detail-brand-logo {
+    align-self: center;
   }
 
   .product-detail-title {
     margin: 12px 0 16px;
     font-size: 27px;
+    text-align: center;
   }
 
   .product-detail-facts {
+    justify-content: center;
+    grid-template-columns: auto auto;
     margin-bottom: 22px;
+    text-align: center;
   }
 
   .product-detail-price-box {
+    justify-content: center;
+    width: 100%;
     margin: 0 0 18px;
+    text-align: center;
+  }
+
+  .product-detail-info .product-condition {
+    align-self: center;
   }
 }
