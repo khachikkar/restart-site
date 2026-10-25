@@ -990,3 +990,27 @@ footer {
     align-self: center;
   }
 }
+
+/* Preserve the full shared footer layout on product pages. */
+.footer-content {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.footer-map {
+  display: block;
+  min-width: 0;
+}
+
+.footer-map iframe {
+  display: block;
+}
+
+.work-hours {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+  }
+}
