@@ -3,11 +3,11 @@
   "badge_options": {
     "sale": {
       "text": "-40%",
-      "bg_color": "#fd7e14"
+      "bg_color": "red"
     },
     "sold_out": {
       "text": "Sold out",
-      "bg_color": "#6c757d"
+      "bg_color": "gray"
     },
     "urgent": {
       "text": "Շտապ",
@@ -15,7 +15,7 @@
     },
     "new_item": {
       "text": "Նոր տեսականի",
-      "bg_color": "#0d6efd"
+      "bg_color": "green"
     },
     "special": {
       "text": "Հատուկ առաջարկ",
@@ -23,7 +23,7 @@
     },
     "new": {
       "text": "New",
-      "bg_color": "#198754"
+      "bg_color": "purple"
     }
   },
   "banner": {

@@ -9,7 +9,7 @@
         "price": "180,000 դր",
         "old_price": "210,000 դր",
         "image_url": "assets/washing/washing-autumn.png",
-        "badge": "sale",
+        "badge": "urgent",
         "brand": "Samsung",
         "brand_logo": "assets/brands/beko.svg",
         "condition": "new"
@@ -20,7 +20,7 @@
         "price": "180,000 դր",
         "old_price": "210,000 դր",
         "image_url": "assets/washing/washing-autumn.png",
-        "badge": "sale",
+        "badge": "new",
         "brand": "Samsung",
         "brand_logo": "assets/brands/beko.svg",
         "condition": "new"
@@ -31,7 +31,7 @@
         "price": "180,000 դր",
         "old_price": "210,000 դր",
         "image_url": "assets/washing/washing-autumn.png",
-        "badge": "sale",
+        "badge": "special",
         "brand": "Samsung",
         "brand_logo": "assets/brands/beko.svg",
         "condition": "new"
@@ -42,7 +42,7 @@
         "price": "220,000 դր",
         "old_price": "",
         "image_url": "assets/washing/washing-1.png",
-        "badge": "sale",
+        "badge": "new_item",
         "brand": "Samsung",
         "brand_logo": "assets/brands/samsung.svg",
         "condition": "used"
