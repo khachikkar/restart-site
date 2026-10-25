@@ -1,14 +1,31 @@
 {
   "_guide": "Ապրանքները բաժանված են առանձին զանգվածների ըստ կատեգորիաների:",
   "badge_options": {
-    "sale": { "text": "-40%", "bg_color": "#fd7e14" },
-    "sold_out": { "text": "Sold out", "bg_color": "#6c757d" },
-    "urgent": { "text": "Շտապ", "bg_color": "#fd7e14" },
-    "new_item": { "text": "Նոր տեսականի", "bg_color": "#0d6efd" },
-    "special": { "text": "Հատուկ առաջարկ", "bg_color": "blue" },
-    "new": { "text": "New", "bg_color": "#198754" }
+    "sale": {
+      "text": "-40%",
+      "bg_color": "#fd7e14"
+    },
+    "sold_out": {
+      "text": "Sold out",
+      "bg_color": "#6c757d"
+    },
+    "urgent": {
+      "text": "Շտապ",
+      "bg_color": "#fd7e14"
+    },
+    "new_item": {
+      "text": "Նոր տեսականի",
+      "bg_color": "#0d6efd"
+    },
+    "special": {
+      "text": "Հատուկ առաջարկ",
+      "bg_color": "blue"
+    },
+    "new": {
+      "text": "New",
+      "bg_color": "#198754"
+    }
   },
-
   "banner": {
     "title": "Աշնանային մինչև 40% Զեղչ ամբողջ տեսականու համար",
     "description": "Զանգահարիր հիմա և ստացիր քո զեղչը",
@@ -17,7 +34,6 @@
     "image_url": "assets/banners/hero-banner-web-autumn-sale.png",
     "mobile_image_url": "assets/banners/hero-banner-mob-autumn-sale.png"
   },
-
   "product_sections": [
     {
       "category_key": "techniqua",
@@ -34,7 +50,7 @@
           "brand_logo": "assets/brands/beko.svg",
           "condition": "new"
         },
-         {
+        {
           "id": 11,
           "title": "Լվացքի մեքենա Samsung",
           "price": "180,000 դր",
@@ -45,7 +61,7 @@
           "brand_logo": "assets/brands/beko.svg",
           "condition": "new"
         },
-              {
+        {
           "id": 12,
           "title": "Լվացքի մեքենա Samsung",
           "price": "180,000 դր",
@@ -77,10 +93,42 @@
           "brand": "Samsung",
           "brand_logo": "assets/brands/lg.svg",
           "condition": "used"
+        },
+        {
+          "id": 104,
+          "title": "Լվացքի մեքենա Samsung 5kg",
+          "price": "40,000 դր",
+          "old_price": "60,000 դր",
+          "image_url": "assets/washing/samsung-5kg-used.jpg",
+          "badge": "sale",
+          "brand": "Samsung",
+          "brand_logo": "assets/brands/samsung.svg",
+          "condition": "used"
+        },
+        {
+          "id": 105,
+          "title": "Լվացքի մեքենա Hisense 7kg",
+          "price": "70,000 դր",
+          "old_price": "90,000 դր",
+          "image_url": "assets/washing/hisense-7kg-used.jpg",
+          "badge": "sale",
+          "brand": "Hisense",
+          "brand_logo": "assets/brands/hisense.svg",
+          "condition": "used"
+        },
+        {
+          "id": 106,
+          "title": "Լվացքի մեքենա Indesit 7kg",
+          "price": "140,000 դր",
+          "old_price": "",
+          "image_url": "assets/washing/indesit-7kg-new.jpg",
+          "badge": "sale",
+          "brand": "Indesit",
+          "brand_logo": "assets/brands/indesit.svg",
+          "condition": "new"
         }
       ]
     },
-
     {
       "category_key": "techniqua",
       "subcategory": "Սառնարաններ",
@@ -96,7 +144,7 @@
           "brand_logo": "assets/brands/samsung.svg",
           "condition": "used"
         },
-         {
+        {
           "id": 55,
           "title": "Սառնարան No Frost",
           "price": "280,000 դր",
@@ -131,7 +179,6 @@
         }
       ]
     },
-
     {
       "category_key": "techniqua",
       "subcategory": "Սպասք լվալու մեքենաներ",
@@ -182,7 +229,6 @@
         }
       ]
     },
-
     {
       "category_key": "spare_parts",
       "subcategory": "Պահեստամասեր",
