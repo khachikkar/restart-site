@@ -156,7 +156,43 @@ function renderProduct(container, product, badgeOptions) {
   cta.className = "product-detail-cta";
   cta.href = "tel:098206064";
   cta.textContent = "Զանգել / Գնել";
+
   info.appendChild(cta);
+
+  const shareButton = document.createElement("button");
+  shareButton.className = "product-detail-share";
+  shareButton.type = "button";
+  shareButton.textContent = "Կիսվել ապրանքով";
+  shareButton.addEventListener("click", async () => {
+    const originalLabel = "Կիսվել ապրանքով";
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+    } catch (error) {
+      const temporaryInput = document.createElement("textarea");
+      temporaryInput.value = window.location.href;
+      temporaryInput.setAttribute("readonly", "");
+      temporaryInput.style.position = "fixed";
+      temporaryInput.style.opacity = "0";
+      document.body.appendChild(temporaryInput);
+      temporaryInput.select();
+      const copied = document.execCommand("copy");
+      temporaryInput.remove();
+
+      if (!copied) {
+        shareButton.textContent = "Պատճենեք հղումը հասցեի տողից";
+        window.setTimeout(() => {
+          shareButton.textContent = originalLabel;
+        }, 2500);
+        return;
+      }
+    }
+
+    shareButton.textContent = "Հղումը պատճենվեց";
+    window.setTimeout(() => {
+      shareButton.textContent = originalLabel;
+    }, 2000);
+  });
+  info.appendChild(shareButton);
 
   layout.append(visual, info);
   container.appendChild(layout);
