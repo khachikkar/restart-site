@@ -928,6 +928,26 @@ footer {
   background: #e63946;
 }
 
+.product-detail-share {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 13px 20px;
+  border: 1px solid #111;
+  border-radius: 7px;
+  background: #fff;
+  color: #111;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.product-detail-share:hover {
+  background: #f1f1f1;
+}
+
 .product-detail-message {
   min-height: 320px;
   display: grid;
