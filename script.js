@@ -180,4 +180,3 @@ function filterCategory(category, event) {
   renderProducts(category);
 }
 
-loadData();
