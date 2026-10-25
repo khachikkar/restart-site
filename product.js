@@ -22,8 +22,7 @@ async function loadProductPage() {
   const container = document.getElementById("product-detail-container");
 
   await Promise.all([
-    loadFragment("header-slot", "sections/header.html"),
-    loadFragment("footer-slot", "sections/footer.html")
+    loadFragment("header-slot", "sections/header.html")
   ]);
 
   if (!productId) {
