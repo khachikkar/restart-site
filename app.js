@@ -3,6 +3,7 @@ const pageSections = [
   ["hero-slot", "sections/hero.html"],
   ["brands-slot", "sections/brands.html"],
   ["benefits-slot", "sections/benefits.html"],
+  ["service-availability-slot", "sections/service-availability.html"],
   ["products-slot", "sections/products.html"],
   ["about-slot", "sections/about.html"],
   ["footer-slot", "sections/footer.html"]

@@ -561,9 +561,20 @@ footer {
     display: block;
 
   }
-  .header-call-btn,
-  .header-whatsapp-btn {
+  .header-call-btn {
     display: none;
+  }
+  .header-whatsapp-btn {
+    display: inline-flex;
+    padding: 7px 10px;
+    font-size: 13px;
+  }
+  .header-whatsapp-btn .whatsapp-icon {
+    width: 17px;
+    height: 17px;
+  }
+  .nav-right-actions {
+    gap: 10px;
   }
   .nav-links {
     display: none; /* Թաքցնում ենք դեսքթոփ մենյուն մոբայլում */
@@ -1301,5 +1312,37 @@ footer .work-hours {
 @media (max-width: 768px) {
   footer .footer-content {
     grid-template-columns: 1fr;
+  }
+}
+
+
+/* YEREVAN SERVICE AVAILABILITY BANNER */
+.service-availability-section {
+  margin-top: 0;
+  margin-bottom: 40px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.service-availability-section img {
+  display: block;
+  width: 100%;
+  height: clamp(200px, 25vw, 300px);
+  object-fit: cover;
+  object-position: center 38%;
+}
+
+@media (max-width: 600px) {
+  .service-availability-section {
+    margin-bottom: 30px;
+    border-radius: 10px;
+  }
+
+  .service-availability-section img {
+    object-fit: contain;
+    object-position: center;
+    background: #fff;
   }
 }
