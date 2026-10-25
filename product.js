@@ -46,17 +46,27 @@ async function loadProductPage() {
     })
   );
 
-  const product = sectionGroups
-    .flat()
-    .flatMap(section => section.items || [])
-    .find(item => String(item.id) === productId);
+  const productSections = sectionGroups.flat();
+  const productSection = productSections.find(section =>
+    (section.items || []).some(item => String(item.id) === productId)
+  );
+  const product = (productSection?.items || []).find(item => String(item.id) === productId);
 
   if (!product) {
     renderProductMessage(container, "Այս ID-ով ապրանք չի գտնվել։");
     return;
   }
 
-  renderProduct(container, product, mainData.badge_options || {});
+  const similarProducts = (productSection.items || [])
+    .filter(item => String(item.id) !== productId)
+    .slice(0, 5);
+
+  renderProduct(
+    container,
+    product,
+    mainData.badge_options || {},
+    similarProducts
+  );
   document.title = `${product.title} | Restart`;
 }
 
@@ -68,7 +78,7 @@ function renderProductMessage(container, message) {
   container.appendChild(heading);
 }
 
-function renderProduct(container, product, badgeOptions) {
+function renderProduct(container, product, badgeOptions, similarProducts = []) {
   container.innerHTML = "";
 
   const layout = document.createElement("article");
@@ -196,6 +206,80 @@ function renderProduct(container, product, badgeOptions) {
 
   layout.append(visual, info);
   container.appendChild(layout);
+
+  renderSimilarProducts(container, product, similarProducts, badgeOptions);
+}
+
+function renderSimilarProducts(container, currentProduct, products, badgeOptions) {
+  if (!products.length) return;
+
+  const section = document.createElement("section");
+  section.className = "similar-products";
+  section.setAttribute("aria-labelledby", "similar-products-title");
+
+  const heading = document.createElement("h2");
+  heading.id = "similar-products-title";
+  heading.textContent = "Նմանատիպ ապրանքներ";
+
+  const track = document.createElement("div");
+  track.className = "similar-products-track";
+
+  products.forEach(product => {
+    const card = document.createElement("a");
+    card.className = "similar-product-card";
+    card.href = `product.html?id=${encodeURIComponent(product.id)}`;
+    card.setAttribute("aria-label", `${product.title}՝ ${product.price}`);
+
+    const imageFrame = document.createElement("div");
+    imageFrame.className = "similar-product-image-frame";
+
+    const badge = badgeOptions[product.badge];
+    if (badge) {
+      const badgeElement = document.createElement("span");
+      badgeElement.className = "product-badge";
+      badgeElement.style.backgroundColor = badge.bg_color || "#fd7e14";
+      badgeElement.textContent = badge.text || "";
+      imageFrame.appendChild(badgeElement);
+    }
+
+    const image = document.createElement("img");
+    image.src = product.image_url;
+    image.alt = product.title;
+    image.loading = "lazy";
+    imageFrame.appendChild(image);
+    card.appendChild(imageFrame);
+
+    const condition = productConditionLabels[product.condition];
+    if (condition) {
+      const conditionElement = document.createElement("span");
+      conditionElement.className = "similar-product-condition";
+      conditionElement.textContent = condition;
+      card.appendChild(conditionElement);
+    }
+
+    const title = document.createElement("h3");
+    title.textContent = product.title;
+    card.appendChild(title);
+
+    const price = document.createElement("div");
+    price.className = "similar-product-price";
+    if (product.old_price) {
+      const oldPrice = document.createElement("span");
+      oldPrice.className = "old-price";
+      oldPrice.textContent = product.old_price;
+      price.appendChild(oldPrice);
+    }
+    const currentPrice = document.createElement("span");
+    currentPrice.className = "price";
+    currentPrice.textContent = product.price;
+    price.appendChild(currentPrice);
+    card.appendChild(price);
+
+    track.appendChild(card);
+  });
+
+  section.append(heading, track);
+  container.appendChild(section);
 }
 
 loadProductPage().catch(error => {
