@@ -61,20 +61,107 @@ function renderBanner(banner) {
   const container = document.getElementById("hero-container");
   if (!container || !banner) return;
 
-  const isMobile = window.innerWidth <= 768;
-  const bgImage =
-    isMobile && banner.mobile_image_url
-      ? banner.mobile_image_url
-      : banner.image_url;
+  const slides = (Array.isArray(banner.slides) ? banner.slides : [])
+    .filter(slide => slide && (slide.image_url || slide.mobile_image_url));
 
-  container.innerHTML = `
-    <div class="hero-image" style="background-image: url('${bgImage}');"></div>
-    <div class="hero-content">
-      <h1>${banner.title}</h1>
-      <p>${banner.description}</p>
-      <a href="${banner.button_link}" class="btn-primary">${banner.button_text}</a>
-    </div>
+  // Keep the current banner working for older JSON that has only image_url fields.
+  if (slides.length === 0 && banner.image_url) {
+    slides.push({
+      id: "banner-1",
+      image_url: banner.image_url,
+      mobile_image_url: banner.mobile_image_url || ""
+    });
+  }
+
+  const imageLayer = document.createElement("div");
+  imageLayer.className = "hero-image";
+  imageLayer.setAttribute("aria-hidden", "true");
+
+  const content = document.createElement("div");
+  content.className = "hero-content";
+  content.innerHTML = `
+    <h1>${banner.title}</h1>
+    <p>${banner.description}</p>
+    <a href="${banner.button_link}" class="btn-primary">${banner.button_text}</a>
   `;
+
+  container.replaceChildren(imageLayer, content);
+
+  if (slides.length > 1) {
+    const controls = document.createElement("div");
+    controls.className = "hero-slider-controls";
+    controls.setAttribute("aria-label", "Բանների կառավարում");
+    controls.innerHTML = `
+      <button class="hero-slider-arrow hero-slider-prev" type="button" aria-label="Նախորդ բաններ">&#10094;</button>
+      <div class="hero-slider-dots" role="group" aria-label="Ընտրել բանները">
+        ${slides.map((slide, index) => `
+          <button class="hero-slider-dot${index === 0 ? " active" : ""}" type="button" data-slide-index="${index}" aria-label="${slide.id || `banner-${index + 1}`}" aria-current="${index === 0 ? "true" : "false"}"></button>
+        `).join("")}
+      </div>
+      <button class="hero-slider-arrow hero-slider-next" type="button" aria-label="Հաջորդ բաններ">&#10095;</button>
+    `;
+    container.append(controls);
+
+    let activeIndex = 0;
+    let autoplayTimer;
+    const slideButtons = [...controls.querySelectorAll(".hero-slider-dot")];
+
+    function showSlide(index) {
+      activeIndex = (index + slides.length) % slides.length;
+      const slide = slides[activeIndex];
+      const isMobile = window.innerWidth <= 768;
+      const imageUrl = isMobile && slide.mobile_image_url
+        ? slide.mobile_image_url
+        : slide.image_url || slide.mobile_image_url;
+      imageLayer.style.backgroundImage = `url("${imageUrl}")`;
+
+      slideButtons.forEach((button, buttonIndex) => {
+        const isActive = buttonIndex === activeIndex;
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-current", isActive ? "true" : "false");
+      });
+    }
+
+    controls.querySelector(".hero-slider-prev").addEventListener("click", () => showSlide(activeIndex - 1));
+    controls.querySelector(".hero-slider-next").addEventListener("click", () => showSlide(activeIndex + 1));
+    slideButtons.forEach(button => {
+      button.addEventListener("click", () => showSlide(Number(button.dataset.slideIndex)));
+    });
+
+    let touchStartX = 0;
+    imageLayer.addEventListener("touchstart", event => {
+      touchStartX = event.changedTouches[0].clientX;
+    }, { passive: true });
+    imageLayer.addEventListener("touchend", event => {
+      const touchDelta = event.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(touchDelta) > 45) showSlide(activeIndex + (touchDelta < 0 ? 1 : -1));
+    }, { passive: true });
+
+    container.addEventListener("mouseenter", () => window.clearInterval(autoplayTimer));
+    container.addEventListener("mouseleave", startAutoplay);
+    container.addEventListener("focusin", () => window.clearInterval(autoplayTimer));
+    container.addEventListener("focusout", startAutoplay);
+    window.addEventListener("resize", () => showSlide(activeIndex));
+
+    function startAutoplay() {
+      window.clearInterval(autoplayTimer);
+      autoplayTimer = window.setInterval(() => showSlide(activeIndex + 1), 5000);
+    }
+
+    showSlide(0);
+    startAutoplay();
+  } else if (slides.length === 1) {
+    const slide = slides[0];
+    const setImage = () => {
+      const isMobile = window.innerWidth <= 768;
+      const imageUrl = isMobile && slide.mobile_image_url
+        ? slide.mobile_image_url
+        : slide.image_url || slide.mobile_image_url;
+      imageLayer.style.backgroundImage = `url("${imageUrl}")`;
+    };
+    setImage();
+    window.addEventListener("resize", setImage);
+  }
 }
 
 function getBadgeHtml(badgeKey) {

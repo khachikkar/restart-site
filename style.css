@@ -82,6 +82,36 @@ body {
   background-color: #d62828;
 }
 
+.whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #25d366;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.whatsapp-btn:hover {
+  background-color: #1ebe5d;
+}
+
+.header-whatsapp-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.whatsapp-icon {
+  display: block;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 auto;
+  fill: currentColor;
+}
+
 /* --- MOBILE HAMBURGER BUTTON --- */
 .mobile-menu-btn {
   display: none;
@@ -145,6 +175,12 @@ body {
   margin-top: 15px;
 }
 
+.mobile-menu-whatsapp {
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-size: 18px !important;
+}
+
 .close-menu-btn {
   position: absolute;
   top: 20px;
@@ -178,6 +214,60 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   z-index: 1;
+}
+
+.hero-slider-controls {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.hero-slider-arrow {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin: 0 18px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(17, 17, 17, 0.62);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 0.2s;
+}
+
+.hero-slider-arrow:hover {
+  background: rgba(17, 17, 17, 0.88);
+}
+
+.hero-slider-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  display: flex;
+  gap: 9px;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.hero-slider-dot {
+  width: 11px;
+  height: 11px;
+  padding: 0;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: rgba(17, 17, 17, 0.4);
+  cursor: pointer;
+}
+
+.hero-slider-dot.active {
+  background: #e63946;
 }
 
 .hero-content {
@@ -471,7 +561,8 @@ footer {
     display: block;
 
   }
-  .header-call-btn {
+  .header-call-btn,
+  .header-whatsapp-btn {
     display: none;
   }
   .nav-links {
@@ -495,6 +586,23 @@ footer {
     width: 100%;
     height: 250px;
     background-size: cover;
+  }
+
+  .hero-slider-controls {
+    inset: 0 0 auto;
+    height: 250px;
+  }
+
+  .hero-slider-arrow {
+    width: 36px;
+    height: 36px;
+    margin: 0 10px;
+    font-size: 17px;
+  }
+
+  .hero-slider-dots {
+    top: auto;
+    bottom: 12px;
   }
 
   .hero-content {

@@ -32,7 +32,24 @@
     "button_text": "Տեսնել ապրանքները",
     "button_link": "#products",
     "image_url": "assets/banners/hero-banner-web-autumn-sale.png",
-    "mobile_image_url": "assets/banners/hero-banner-mob-autumn-sale.png"
+    "mobile_image_url": "assets/banners/hero-banner-mob-autumn-sale.png",
+    "slides": [
+      {
+        "id": "banner-1",
+        "image_url": "assets/banners/hero-banner-web-autumn-sale.png",
+        "mobile_image_url": "assets/banners/hero-banner-mob-autumn-sale.png"
+      },
+      {
+        "id": "banner-2",
+        "image_url": "assets/banners/hero-banner-web.png",
+        "mobile_image_url": "assets/banners/hero-banner-mob.png"
+      },
+      {
+        "id": "banner-3",
+        "image_url": "assets/banners/hero-banner-web-general.png",
+        "mobile_image_url": "assets/banners/hero-banner-mob-general.png"
+      }
+    ]
   },
   "product_data_files": [
     "data/washing-machines.json",
