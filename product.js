@@ -227,10 +227,10 @@ function renderSimilarProducts(container, currentProduct, products, badgeOptions
     }
 
     const image = document.createElement("img");
-    image.src = optimizedImageUrl(product.image_url);
+    setProductCardImageSource(image, product.image_url, "(max-width: 760px) 42vw, 220px");
     image.alt = product.title;
-    image.width = 1080;
-    image.height = 1400;
+    image.width = 493;
+    image.height = 640;
     image.loading = "lazy";
     imageFrame.appendChild(image);
     card.appendChild(imageFrame);

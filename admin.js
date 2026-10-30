@@ -18,20 +18,153 @@ const productMessage = document.getElementById("product-message");
 const catalogMessage = document.getElementById("catalog-message");
 const productList = document.getElementById("admin-product-list");
 const badgeSelect = document.getElementById("product-badge");
+const brandSelect = document.getElementById("product-brand");
+const brandLogoInput = document.getElementById("product-brand-logo");
+const brandLogoOptions = document.getElementById("brand-logo-options");
+const newBrandFields = document.getElementById("new-brand-fields");
+const newBrandNameInput = document.getElementById("new-brand-name");
+const newBrandLogoFileInput = document.getElementById("new-brand-logo-file");
+const newBrandLogoPreview = document.getElementById("new-brand-logo-preview");
+const newBrandLogoPreviewImage = document.getElementById("new-brand-logo-preview-image");
+const newBrandLogoPreviewName = document.getElementById("new-brand-logo-preview-name");
+
+const brandOptions = [
+  { name: "Samsung", logo: "assets/brands/samsung.svg" },
+  { name: "LG", logo: "assets/brands/lg.svg" },
+  { name: "Beko", logo: "assets/brands/beko.svg" },
+  { name: "Electrolux", logo: "assets/brands/electrolux.svg" },
+  { name: "Hisense", logo: "assets/brands/hisense.svg" },
+  { name: "Indesit", logo: "assets/brands/indesit.svg" }
+];
 
 let authMode = "signin";
 let products = [];
 let isEditing = false;
 let selectedImageFile = null;
+let selectedBrandLogoFile = null;
 let previewObjectUrl = null;
+let brandLogoPreviewObjectUrl = null;
 let bannerConfig = null;
 const bannerPreviewObjectUrls = new WeakMap();
+
+function syncBrandSelection(brandName) {
+  const addingNewBrand = brandName === "__new__";
+  newBrandFields.hidden = !addingNewBrand;
+  brandLogoOptions.hidden = addingNewBrand;
+
+  if (addingNewBrand) {
+    brandSelect.value = "__new__";
+    brandLogoInput.value = "";
+    brandLogoOptions.querySelectorAll(".brand-logo-option").forEach(button => {
+      button.setAttribute("aria-pressed", "false");
+      button.classList.remove("is-selected");
+    });
+    return;
+  }
+
+  const selectedBrand = brandOptions.find(brand => brand.name === brandName);
+  if (brandName && !selectedBrand && ![...brandSelect.options].some(option => option.value === brandName)) {
+    const existingBrand = document.createElement("option");
+    existingBrand.value = brandName;
+    existingBrand.textContent = `${brandName} (առանց լոգոյի)`;
+    brandSelect.appendChild(existingBrand);
+  }
+
+  brandSelect.value = selectedBrand?.name || brandName || "";
+  brandLogoInput.value = selectedBrand?.logo || "";
+
+  brandLogoOptions.querySelectorAll(".brand-logo-option").forEach(button => {
+    const isSelected = button.dataset.brand === brandSelect.value;
+    button.setAttribute("aria-pressed", String(isSelected));
+    button.classList.toggle("is-selected", isSelected);
+  });
+}
+
+function initializeBrandPicker() {
+  renderBrandLogoOptions();
+
+  brandSelect.addEventListener("change", () => syncBrandSelection(brandSelect.value));
+  syncBrandSelection(brandSelect.value);
+}
+
+function renderBrandLogoOptions() {
+  const buttons = brandOptions.map(brand => {
+    const button = document.createElement("button");
+    button.className = "brand-logo-option";
+    button.type = "button";
+    button.setAttribute("aria-pressed", "false");
+    button.dataset.brand = brand.name;
+
+    if (brand.logo) {
+      const image = document.createElement("img");
+      image.src = brand.logo;
+      image.alt = "";
+      image.loading = "lazy";
+      button.appendChild(image);
+    } else {
+      const noLogo = document.createElement("span");
+      noLogo.className = "brand-logo-missing";
+      noLogo.textContent = "Լոգո չկա";
+      button.appendChild(noLogo);
+    }
+
+    const name = document.createElement("span");
+    name.textContent = brand.name;
+    button.appendChild(name);
+    return button;
+  });
+  brandLogoOptions.replaceChildren(...buttons);
+
+  buttons.forEach(button => {
+    button.addEventListener("click", () => syncBrandSelection(button.dataset.brand));
+  });
+}
+
+function registerBrandOption(name, logo) {
+  const normalizedName = (name || "").trim();
+  if (!normalizedName || normalizedName === "__new__") return;
+
+  const existing = brandOptions.find(brand => brand.name.toLocaleLowerCase() === normalizedName.toLocaleLowerCase());
+  if (existing) {
+    if (!existing.logo && logo) existing.logo = logo;
+    return;
+  }
+
+  brandOptions.push({ name: normalizedName, logo: logo || "", custom: true });
+  const option = document.createElement("option");
+  option.value = normalizedName;
+  option.textContent = normalizedName;
+  option.dataset.customBrand = "true";
+  brandSelect.insertBefore(option, brandSelect.querySelector('[value="__new__"]'));
+}
+
+function loadBrandsFromProducts(productRows) {
+  productRows.forEach(product => registerBrandOption(product.brand, product.brand_logo));
+  renderBrandLogoOptions();
+  syncBrandSelection(brandSelect.value);
+}
+
+initializeBrandPicker();
 
 function setMessage(element, message = "", type = "") {
   element.textContent = message;
   element.classList.toggle("is-error", type === "error");
   element.classList.toggle("is-success", type === "success");
 }
+
+function formatPriceWithDram(value) {
+  const amount = String(value ?? "")
+    .trim()
+    .replace(/(?:\s*(?:դրամ|դր\.?|amd|֏))+$/iu, "")
+    .trim();
+  return amount ? `${amount} դր` : "";
+}
+
+[document.getElementById("product-price"), document.getElementById("product-old-price")].forEach(input => {
+  input.addEventListener("blur", () => {
+    if (input.value.trim()) input.value = formatPriceWithDram(input.value);
+  });
+});
 
 function showScreen(screen) {
   authScreen.hidden = screen !== "auth";
@@ -75,7 +208,6 @@ async function loadProducts() {
   const { data, error } = await supabaseClient
     .from("products")
     .select("*")
-    .order("subcategory", { ascending: true })
     .order("display_order", { ascending: true })
     .order("id", { ascending: true });
 
@@ -85,6 +217,7 @@ async function loadProducts() {
   }
 
   products = data || [];
+  loadBrandsFromProducts(products);
   renderProductList();
   setMessage(catalogMessage);
 }
@@ -249,8 +382,14 @@ function renderProductList() {
 function resetProductForm() {
   productForm.reset();
   selectedImageFile = null;
+  selectedBrandLogoFile = null;
   if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
   previewObjectUrl = null;
+  if (brandLogoPreviewObjectUrl) URL.revokeObjectURL(brandLogoPreviewObjectUrl);
+  brandLogoPreviewObjectUrl = null;
+  newBrandLogoPreview.hidden = true;
+  newBrandLogoPreviewImage.removeAttribute("src");
+  newBrandLogoPreviewName.textContent = "";
   document.getElementById("image-upload-preview").hidden = true;
   document.getElementById("image-preview").removeAttribute("src");
   document.getElementById("image-preview-name").textContent = "";
@@ -258,6 +397,7 @@ function resetProductForm() {
   document.getElementById("product-condition").value = "new";
   document.getElementById("product-category").value = "washing";
   document.getElementById("product-badge").value = "";
+  syncBrandSelection("");
   document.getElementById("editor-heading").textContent = "Ավելացնել ապրանք";
   document.getElementById("save-product").textContent = "Պահպանել ապրանքը";
   document.getElementById("cancel-edit").hidden = true;
@@ -275,8 +415,7 @@ function beginEdit(product) {
   document.getElementById("product-old-price").value = product.old_price || "";
   document.getElementById("product-condition").value = product.condition || "new";
   document.getElementById("product-badge").value = product.badge || "";
-  document.getElementById("product-brand").value = product.brand || "";
-  document.getElementById("product-brand-logo").value = product.brand_logo || "";
+  syncBrandSelection(product.brand || "");
   document.getElementById("product-image").value = product.image_url;
   document.getElementById("editor-heading").textContent = "Խմբագրել ապրանքը";
   document.getElementById("save-product").textContent = "Պահպանել փոփոխությունները";
@@ -293,8 +432,31 @@ async function saveProduct(event) {
 
   const id = Number(document.getElementById("product-id").value);
   const category = categoryOptions[document.getElementById("product-category").value];
+  const selectedBrandName = brandSelect.value;
+  const selectedBrand = brandOptions.find(brand => brand.name === brandSelect.value);
+  const isAddingNewBrand = selectedBrandName === "__new__";
+  const newBrandName = newBrandNameInput.value.trim();
   const existing = products.find(product => product.id === id);
   const existingImageUrl = document.getElementById("product-image").value.trim();
+
+  if (isAddingNewBrand) {
+    if (!newBrandName || newBrandName === "__new__") {
+      setMessage(productMessage, "Գրիր նոր բրենդի անունը։", "error");
+      saveButton.disabled = false;
+      return;
+    }
+    if (brandOptions.some(brand => brand.name.toLocaleLowerCase() === newBrandName.toLocaleLowerCase())) {
+      setMessage(productMessage, "Այս բրենդն արդեն կա ցանկում․ ընտրիր այն ցանկից։", "error");
+      saveButton.disabled = false;
+      return;
+    }
+    if (!selectedBrandLogoFile) {
+      setMessage(productMessage, "Ընտրիր նոր բրենդի լոգոյի ֆայլը։", "error");
+      saveButton.disabled = false;
+      return;
+    }
+  }
+
   if (!selectedImageFile && !existingImageUrl) {
     setMessage(productMessage, "Ընտրիր նկարը համակարգչից կամ լրացրու նկարի հղումը։", "error");
     saveButton.disabled = false;
@@ -302,15 +464,23 @@ async function saveProduct(event) {
   }
 
   let imageUrl = existingImageUrl;
-  if (selectedImageFile) {
-    setMessage(productMessage, "Նկարը վերբեռնվում է…");
-    try {
-      imageUrl = await uploadAdminImage(selectedImageFile, `products/${id}`);
-    } catch (uploadError) {
-      setMessage(productMessage, `Նկարը չվերբեռնվեց․ ${uploadError.message}`, "error");
-      saveButton.disabled = false;
-      return;
+  let brandLogoUrl = selectedBrand?.logo || null;
+  let brandName = selectedBrandName;
+  try {
+    if (isAddingNewBrand) {
+      setMessage(productMessage, "Նոր բրենդի լոգոն վերբեռնվում է…");
+      brandLogoUrl = await uploadAdminImage(selectedBrandLogoFile, "brands");
+      brandName = newBrandName;
     }
+
+    if (selectedImageFile) {
+      setMessage(productMessage, "Ապրանքի նկարը վերբեռնվում է…");
+      imageUrl = await uploadAdminImage(selectedImageFile, `products/${id}`);
+    }
+  } catch (uploadError) {
+    setMessage(productMessage, `Նկարը չվերբեռնվեց․ ${uploadError.message}`, "error");
+    saveButton.disabled = false;
+    return;
   }
 
   const payload = {
@@ -319,14 +489,14 @@ async function saveProduct(event) {
     subcategory: category.subcategory,
     display_order: isEditing && existing
       ? existing.display_order
-      : Math.max(0, ...products.filter(product => product.subcategory === category.subcategory).map(product => product.display_order + 1)),
+      : Math.min(0, ...products.map(product => Number(product.display_order) || 0)) - 1,
     title: document.getElementById("product-title").value.trim(),
-    price: document.getElementById("product-price").value.trim(),
-    old_price: document.getElementById("product-old-price").value.trim(),
+    price: formatPriceWithDram(document.getElementById("product-price").value),
+    old_price: formatPriceWithDram(document.getElementById("product-old-price").value),
     image_url: imageUrl,
     badge: document.getElementById("product-badge").value || null,
-    brand: document.getElementById("product-brand").value.trim() || null,
-    brand_logo: document.getElementById("product-brand-logo").value.trim() || null,
+    brand: brandName || null,
+    brand_logo: brandLogoUrl,
     condition: document.getElementById("product-condition").value
   };
 
@@ -520,6 +690,40 @@ document.getElementById("product-image-file").addEventListener("change", event =
   previewImage.src = previewObjectUrl;
   previewName.textContent = file.name;
   preview.hidden = false;
+  setMessage(productMessage);
+});
+
+newBrandLogoFileInput.addEventListener("change", event => {
+  const file = event.target.files?.[0] || null;
+  selectedBrandLogoFile = null;
+  if (brandLogoPreviewObjectUrl) URL.revokeObjectURL(brandLogoPreviewObjectUrl);
+  brandLogoPreviewObjectUrl = null;
+
+  if (!file) {
+    newBrandLogoPreview.hidden = true;
+    newBrandLogoPreviewImage.removeAttribute("src");
+    newBrandLogoPreviewName.textContent = "";
+    return;
+  }
+
+  if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
+    event.target.value = "";
+    setMessage(productMessage, "Լոգոյի համար ընտրիր PNG, JPEG կամ WebP նկար։", "error");
+    newBrandLogoPreview.hidden = true;
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    event.target.value = "";
+    setMessage(productMessage, "Լոգոյի ֆայլը պետք է լինի մինչև 10 ՄԲ։", "error");
+    newBrandLogoPreview.hidden = true;
+    return;
+  }
+
+  selectedBrandLogoFile = file;
+  brandLogoPreviewObjectUrl = URL.createObjectURL(file);
+  newBrandLogoPreviewImage.src = brandLogoPreviewObjectUrl;
+  newBrandLogoPreviewName.textContent = file.name;
+  newBrandLogoPreview.hidden = false;
   setMessage(productMessage);
 });
 

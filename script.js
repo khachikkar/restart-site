@@ -219,7 +219,7 @@ function renderProducts(categoryFilter) {
 
           <div class="product-img-wrapper">
             ${getBadgeHtml(p.badge)}
-            <img src="${optimizedImageUrl(p.image_url)}" alt="${p.title}" width="1080" height="1400" loading="lazy">
+            <img ${productCardImageAttributes(p.image_url, "(max-width: 600px) 42vw, (max-width: 1200px) 28vw, 245px")} alt="${p.title}" width="493" height="640" loading="lazy" decoding="async">
           </div>
 
           ${conditionHtml}

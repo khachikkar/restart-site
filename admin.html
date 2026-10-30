@@ -86,7 +86,8 @@
               </div>
               <div>
                 <label for="product-price">Գին</label>
-                <input id="product-price" type="text" placeholder="140,000 դր" required>
+                <input id="product-price" type="text" placeholder="140,000" required>
+                <small>«դր»-ը կավելանա ինքնաշխատ։</small>
               </div>
               <div>
                 <label for="product-old-price">Հին գին</label>
@@ -107,11 +108,39 @@
               </div>
               <div>
                 <label for="product-brand">Բրենդ</label>
-                <input id="product-brand" type="text" placeholder="Samsung">
+                <select id="product-brand">
+                  <option value="">Առանց բրենդի</option>
+                  <option value="Samsung">Samsung</option>
+                  <option value="LG">LG</option>
+                  <option value="Beko">Beko</option>
+                  <option value="Electrolux">Electrolux</option>
+                  <option value="Hisense">Hisense</option>
+                  <option value="Indesit">Indesit</option>
+                  <option value="__new__">＋ Ավելացնել նոր բրենդ</option>
+                </select>
               </div>
               <div>
-                <label for="product-brand-logo">Բրենդի լոգոյի ուղի</label>
-                <input id="product-brand-logo" type="text" placeholder="assets/brands/samsung.svg">
+                <label>Բրենդի լոգո</label>
+                <div id="brand-logo-options" class="brand-logo-options" role="group" aria-label="Ընտրել բրենդի լոգոն"></div>
+                <input id="product-brand-logo" type="hidden">
+                <small>Ընտրիր բրենդը կամ լոգոն․ մյուսը կփոխվի ինքնաշխատ։</small>
+              </div>
+              <div id="new-brand-fields" class="admin-field-wide new-brand-fields" hidden>
+                <div>
+                  <label for="new-brand-name">Նոր բրենդի անուն</label>
+                  <input id="new-brand-name" type="text" maxlength="60" placeholder="Օրինակ՝ Bosch">
+                </div>
+                <div>
+                  <label for="new-brand-logo-file">Նոր բրենդի լոգո</label>
+                  <input id="new-brand-logo-file" type="file" accept="image/png,image/jpeg,image/webp">
+                  <small>PNG, JPEG կամ WebP․ առավելագույնը 10 ՄԲ։</small>
+                </div>
+                <div class="admin-field-wide">
+                  <div id="new-brand-logo-preview" class="image-upload-preview" hidden>
+                    <img id="new-brand-logo-preview-image" alt="Նոր բրենդի լոգոյի նախադիտում">
+                    <span id="new-brand-logo-preview-name"></span>
+                  </div>
+                </div>
               </div>
               <div class="admin-field-wide">
                 <label for="product-image-file">Վերբեռնել նկարը համակարգչից</label>

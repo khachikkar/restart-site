@@ -63,7 +63,15 @@ body.admin-body {
 .panel-heading h2 { margin: 0; font-size: 20px; letter-spacing: -.02em; }
 .admin-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px 14px; }
 .admin-form-grid > div { display: grid; align-content: start; gap: 6px; min-width: 0; }
+.brand-logo-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.brand-logo-option { display: grid; min-width: 0; min-height: 52px; justify-items: center; align-content: center; gap: 3px; border: 1px solid var(--admin-line); border-radius: 8px; padding: 5px; background: #fff; color: var(--admin-muted); font: inherit; cursor: pointer; }
+.brand-logo-option img { display: block; width: 100%; max-width: 64px; height: 22px; object-fit: contain; }
+.brand-logo-option .brand-logo-missing { color: var(--admin-muted); font-size: 8px; }
+.brand-logo-option span { overflow: hidden; max-width: 100%; font-size: 9px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.brand-logo-option.is-selected { border-color: var(--admin-red); background: #fff5f6; box-shadow: 0 0 0 2px rgba(230, 57, 70, .1); color: var(--admin-red-dark); }
 .admin-field-wide { grid-column: 1 / -1; }
+.new-brand-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px 14px; }
+.new-brand-fields > div { display: grid; align-content: start; gap: 6px; min-width: 0; }
 .admin-form small { color: var(--admin-muted); font-size: 11px; line-height: 1.45; }
 .admin-form input[type="file"] { padding: 8px; }
 .image-upload-preview { display: flex; align-items: center; gap: 12px; margin-top: 2px; padding: 9px; border: 1px solid var(--admin-line); border-radius: 9px; color: var(--admin-muted); font-size: 12px; overflow-wrap: anywhere; }
@@ -116,6 +124,7 @@ body.admin-body {
   .banner-slide-editor { padding: 13px; }
   .admin-form-grid { grid-template-columns: 1fr; }
   .admin-field-wide { grid-column: auto; }
+  .new-brand-fields { grid-template-columns: 1fr; }
   .catalog-heading { grid-template-columns: 1fr 1fr; align-items: end; gap: 8px 12px; }
   .catalog-heading > div:first-child { grid-column: 1 / -1; }
   .filter-label { padding-bottom: 0; }

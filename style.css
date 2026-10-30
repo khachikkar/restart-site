@@ -1330,6 +1330,10 @@ footer .work-hours {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
+.service-availability-section picture {
+  display: block;
+}
+
 .service-availability-section img {
   display: block;
   width: 100%;

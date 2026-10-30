@@ -17,6 +17,32 @@ function optimizedImageUrl(imageUrl) {
   return imageUrl.replace(/\.png(?=([?#]|$))/i, ".jpg");
 }
 
+function productCardImageSources(imageUrl, sizes) {
+  const fullSizeUrl = optimizedImageUrl(imageUrl);
+  if (typeof fullSizeUrl !== "string" || !fullSizeUrl.startsWith("assets/") || !/\.jpg$/i.test(fullSizeUrl)) {
+    return { src: fullSizeUrl, srcset: "", sizes: "" };
+  }
+
+  const image400 = fullSizeUrl.replace(/\.jpg$/i, "-card-400.jpg");
+  const image640 = fullSizeUrl.replace(/\.jpg$/i, "-card-640.jpg");
+  return { src: image640, srcset: `${image400} 308w, ${image640} 493w`, sizes };
+}
+
+function productCardImageAttributes(imageUrl, sizes) {
+  const sources = productCardImageSources(imageUrl, sizes);
+  if (!sources.srcset) return `src="${sources.src}"`;
+  return `src="${sources.src}" srcset="${sources.srcset}" sizes="${sources.sizes}"`;
+}
+
+function setProductCardImageSource(image, imageUrl, sizes) {
+  const sources = productCardImageSources(imageUrl, sizes);
+  image.src = sources.src;
+  if (sources.srcset) {
+    image.srcset = sources.srcset;
+    image.sizes = sources.sizes;
+  }
+}
+
 async function fetchSupabaseTable(table, query) {
   const url = new URL(`/rest/v1/${table}`, SUPABASE_URL);
   Object.entries(query).forEach(([key, value]) => url.searchParams.set(key, value));
