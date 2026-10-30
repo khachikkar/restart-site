@@ -1047,6 +1047,21 @@ footer {
   background: #e63946;
 }
 
+.product-detail-whatsapp {
+  display: flex;
+  width: 100%;
+  min-height: 54px;
+  margin-top: 12px;
+  padding: 14px 20px;
+  border-radius: 7px;
+  font-size: 17px;
+  box-sizing: border-box;
+}
+
+.product-detail-whatsapp:hover {
+  background-color: #1ebe5d;
+}
+
 .product-detail-share {
   display: block;
   width: 100%;

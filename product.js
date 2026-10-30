@@ -153,6 +153,19 @@ function renderProduct(container, product, badgeOptions, similarProducts = []) {
 
   info.appendChild(cta);
 
+  const whatsappButton = document.createElement("a");
+  whatsappButton.className = "product-detail-whatsapp whatsapp-btn";
+  whatsappButton.href = createProductWhatsAppUrl(product);
+  whatsappButton.target = "_blank";
+  whatsappButton.rel = "noopener noreferrer";
+  whatsappButton.setAttribute("aria-label", `${product.title} ապրանքի մասին գրել WhatsApp-ով`);
+  whatsappButton.innerHTML = `
+    <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M20.52 3.48A11.86 11.86 0 0 0 12.08 0C5.5 0 .15 5.35.15 11.93c0 2.1.55 4.16 1.6 5.97L0 24l6.25-1.64a11.9 11.9 0 0 0 5.82 1.48h.01c6.58 0 11.93-5.35 11.93-11.93 0-3.19-1.24-6.19-3.49-8.43ZM12.08 21.8h-.01a9.86 9.86 0 0 1-5.03-1.38l-.36-.21-3.71.97.99-3.62-.24-.37a9.86 9.86 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.12 1.03 6.98 2.9a9.82 9.82 0 0 1 2.9 6.99c0 5.45-4.45 9.89-9.9 9.89Zm5.43-7.41c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.18.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.78-1.67-2.08-.18-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.53-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.53.08-.8.38-.28.3-1.05 1.02-1.05 2.49s1.08 2.89 1.23 3.09c.15.2 2.12 3.24 5.14 4.55.72.31 1.28.5 1.72.64.72.23 1.37.2 1.89.12.58-.09 1.77-.73 2.02-1.44.25-.72.25-1.32.18-1.44-.08-.13-.28-.2-.58-.35Z"/>
+    </svg>
+    Գրել WhatsApp-ով`;
+  info.appendChild(whatsappButton);
+
   const shareButton = document.createElement("button");
   shareButton.className = "product-detail-share";
   shareButton.type = "button";
@@ -192,6 +205,17 @@ function renderProduct(container, product, badgeOptions, similarProducts = []) {
   container.appendChild(layout);
 
   renderSimilarProducts(container, product, similarProducts, badgeOptions);
+}
+
+function createProductWhatsAppUrl(product) {
+  const message = [
+    "Բարև Ձեզ, հետաքրքրված եմ այս ապրանքով։",
+    `Ապրանք՝ ${product.title}`,
+    `Գին՝ ${product.price}`,
+    `Հղում՝ ${window.location.href}`
+  ].join("\n");
+
+  return `https://wa.me/37498206064?text=${encodeURIComponent(message)}`;
 }
 
 function renderSimilarProducts(container, currentProduct, products, badgeOptions) {
