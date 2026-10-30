@@ -2,6 +2,10 @@
 // this client to reading the public catalog; never put a service-role key here.
 const SUPABASE_URL = "https://sjwlehclztnnglqaaeoy.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_xr26dEBPr9lOVg0dIFu3xQ_VbkDKVr7";
+window.RESTART_SUPABASE_CONFIG = {
+  url: SUPABASE_URL,
+  publishableKey: SUPABASE_PUBLISHABLE_KEY
+};
 
 async function fetchSupabaseTable(table, query) {
   const url = new URL(`/rest/v1/${table}`, SUPABASE_URL);

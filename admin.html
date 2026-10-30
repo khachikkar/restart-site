@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ադմինկայի մուտք | Restart</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+  <main class="admin-shell">
+    <header class="admin-topbar">
+      <a href="index.html" class="admin-brand" aria-label="Restart-ի կայք">
+        <img src="assets/logo.svg" alt="Restart">
+        <span>Կառավարման վահանակ</span>
+      </a>
+      <a class="admin-back-link" href="index.html">Վերադառնալ կայք</a>
+    </header>
+
+    <section id="auth-screen" class="auth-card">
+      <span class="admin-eyebrow">RESTART ADMIN</span>
+      <h1 id="auth-heading">Մուտք ադմինկա</h1>
+      <p id="auth-description">Մուտք գործիր հաստատված ադմին հաշվի միջոցով։</p>
+
+      <form id="auth-form" class="admin-form">
+        <label for="auth-email">Էլ․ փոստ</label>
+        <input id="auth-email" type="email" autocomplete="email" required>
+        <label for="auth-password">Գաղտնաբառ</label>
+        <input id="auth-password" type="password" autocomplete="current-password" minlength="8" required>
+        <button id="auth-submit" class="admin-button admin-button-primary" type="submit">Մուտք գործել</button>
+      </form>
+
+      <button id="signup-toggle" class="admin-text-button" type="button">Առաջին մուտք է՞․ ստեղծել հաշիվ</button>
+      <p id="auth-message" class="admin-message" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="access-denied" class="auth-card" hidden>
+      <span class="admin-eyebrow">RESTART ADMIN</span>
+      <h1>Մուտքը սպասում է հաստատման</h1>
+      <p>Հաշիվը ստեղծված է, բայց դեռ չունի ադմինի իրավունք։ Երբ հաստատեմ այս հաշիվը, նորից մուտք գործիր։</p>
+      <button id="denied-signout" class="admin-button admin-button-secondary" type="button">Դուրս գալ</button>
+    </section>
+
+    <section id="dashboard" class="admin-dashboard" hidden>
+      <div class="dashboard-heading">
+        <div>
+          <span class="admin-eyebrow">RESTART ADMIN</span>
+          <h1>Ապրանքներ</h1>
+          <p>Ավելացրու, խմբագրիր կամ հեռացրու կայքի ապրանքները։</p>
+        </div>
+        <div class="dashboard-user">
+          <span id="admin-user-email"></span>
+          <button id="signout-button" class="admin-button admin-button-secondary" type="button">Դուրս գալ</button>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <section class="admin-panel product-editor-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="admin-eyebrow">ԱՊՐԱՆՔԻ ՏՎՅԱԼՆԵՐ</span>
+              <h2 id="editor-heading">Ավելացնել ապրանք</h2>
+            </div>
+            <button id="cancel-edit" class="admin-text-button" type="button" hidden>Չեղարկել</button>
+          </div>
+
+          <form id="product-form" class="admin-form product-form">
+            <div class="admin-form-grid">
+              <div>
+                <label for="product-id">Ապրանքի ID</label>
+                <input id="product-id" type="number" min="1" step="1" required>
+              </div>
+              <div>
+                <label for="product-category">Բաժին</label>
+                <select id="product-category" required>
+                  <option value="washing">Լվացքի մեքենաներ</option>
+                  <option value="refrigerator">Սառնարաններ</option>
+                  <option value="dishwasher">Սպասք լվալու մեքենաներ</option>
+                  <option value="spare">Պահեստամասեր</option>
+                </select>
+              </div>
+              <div class="admin-field-wide">
+                <label for="product-title">Անվանում</label>
+                <input id="product-title" type="text" required>
+              </div>
+              <div>
+                <label for="product-price">Գին</label>
+                <input id="product-price" type="text" placeholder="140,000 դր" required>
+              </div>
+              <div>
+                <label for="product-old-price">Հին գին</label>
+                <input id="product-old-price" type="text" placeholder="Ըստ ցանկության">
+              </div>
+              <div>
+                <label for="product-condition">Վիճակ</label>
+                <select id="product-condition">
+                  <option value="new">Նոր</option>
+                  <option value="used">Օգտագործված</option>
+                </select>
+              </div>
+              <div>
+                <label for="product-badge">Նշան</label>
+                <select id="product-badge">
+                  <option value="">Առանց նշանի</option>
+                </select>
+              </div>
+              <div>
+                <label for="product-brand">Բրենդ</label>
+                <input id="product-brand" type="text" placeholder="Samsung">
+              </div>
+              <div>
+                <label for="product-brand-logo">Բրենդի լոգոյի ուղի</label>
+                <input id="product-brand-logo" type="text" placeholder="assets/brands/samsung.svg">
+              </div>
+              <div class="admin-field-wide">
+                <label for="product-image-file">Վերբեռնել նկարը համակարգչից</label>
+                <input id="product-image-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif">
+                <div id="image-upload-preview" class="image-upload-preview" hidden>
+                  <img id="image-preview" alt="Ընտրված նկարի նախադիտում">
+                  <span id="image-preview-name"></span>
+                </div>
+                <small>JPEG, PNG, WebP, GIF կամ AVIF․ առավելագույնը 10 ՄԲ։</small>
+              </div>
+              <div class="admin-field-wide">
+                <label for="product-image">Կամ նշիր նկարի հղումը / ֆայլի ուղին</label>
+                <input id="product-image" type="text" placeholder="assets/washing/machine.jpg">
+                <small>Եթե վերևում համակարգչից նկար ընտրես, այն կօգտագործվի այս դաշտի փոխարեն։</small>
+              </div>
+            </div>
+            <div class="admin-form-actions">
+              <button id="save-product" class="admin-button admin-button-primary" type="submit">Պահպանել ապրանքը</button>
+              <span id="product-message" class="admin-message" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+        </section>
+
+        <section class="admin-panel catalog-panel">
+          <div class="panel-heading catalog-heading">
+            <div>
+              <span class="admin-eyebrow">ԿԱՅՔԻ ԿԱՏԱԼՈԳ</span>
+              <h2>Ապրանքների ցանկ <span id="product-count" class="product-count"></span></h2>
+            </div>
+            <label class="filter-label" for="catalog-filter">Բաժին</label>
+            <select id="catalog-filter" class="catalog-filter">
+              <option value="all">Բոլորը</option>
+              <option value="techniqua">Տեխնիկա</option>
+              <option value="spare_parts">Պահեստամասեր</option>
+            </select>
+          </div>
+          <div id="admin-product-list" class="admin-product-list" aria-live="polite"></div>
+          <p id="catalog-message" class="admin-message" role="status" aria-live="polite"></p>
+        </section>
+      </div>
+
+      <section class="admin-panel banners-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="admin-eyebrow">ԳԼԽԱՎՈՐ ԲԱՆՆԵՐ</span>
+            <h2>Բանների նկարներ</h2>
+            <p class="banner-help">Ընտրիր յուրաքանչյուր սլայդի համակարգչային և բջջային նկարը։ Փոփոխությունները կերևան կայքում պահպանումից հետո։</p>
+          </div>
+        </div>
+        <div id="banner-editor-list" class="banner-editor-list"></div>
+        <div class="admin-form-actions">
+          <button id="save-banners" class="admin-button admin-button-primary" type="button">Պահպանել բանների նկարները</button>
+          <p id="banner-message" class="admin-message" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0"></script>
+  <script src="supabase-data.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
