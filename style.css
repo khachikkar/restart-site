@@ -1317,6 +1317,10 @@ footer .work-hours {
 
 
 /* YEREVAN SERVICE AVAILABILITY BANNER */
+#service-availability-slot {
+  min-height: 340px;
+}
+
 .service-availability-section {
   margin-top: 0;
   margin-bottom: 40px;
@@ -1335,6 +1339,10 @@ footer .work-hours {
 }
 
 @media (max-width: 600px) {
+  #service-availability-slot {
+    min-height: 230px;
+  }
+
   .service-availability-section {
     margin-bottom: 30px;
     border-radius: 10px;

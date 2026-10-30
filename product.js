@@ -82,8 +82,11 @@ function renderProduct(container, product, badgeOptions, similarProducts = []) {
 
   const image = document.createElement("img");
   image.className = "product-detail-image";
-  image.src = product.image_url;
+  image.src = optimizedImageUrl(product.image_url);
   image.alt = product.title;
+  image.width = 1080;
+  image.height = 1400;
+  image.fetchPriority = "high";
   imageFrame.appendChild(image);
   visual.appendChild(imageFrame);
 
@@ -224,8 +227,10 @@ function renderSimilarProducts(container, currentProduct, products, badgeOptions
     }
 
     const image = document.createElement("img");
-    image.src = product.image_url;
+    image.src = optimizedImageUrl(product.image_url);
     image.alt = product.title;
+    image.width = 1080;
+    image.height = 1400;
     image.loading = "lazy";
     imageFrame.appendChild(image);
     card.appendChild(imageFrame);

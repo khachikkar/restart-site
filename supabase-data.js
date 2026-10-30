@@ -7,6 +7,16 @@ window.RESTART_SUPABASE_CONFIG = {
   publishableKey: SUPABASE_PUBLISHABLE_KEY
 };
 
+// Local catalog images have lightweight JPEG counterparts. Keep the stored
+// paths intact so admin editing and older JSON data remain compatible.
+function optimizedImageUrl(imageUrl) {
+  if (typeof imageUrl !== "string" || /^(?:[a-z]+:|\/\/)/i.test(imageUrl)) {
+    return imageUrl;
+  }
+
+  return imageUrl.replace(/\.png(?=([?#]|$))/i, ".jpg");
+}
+
 async function fetchSupabaseTable(table, query) {
   const url = new URL(`/rest/v1/${table}`, SUPABASE_URL);
   Object.entries(query).forEach(([key, value]) => url.searchParams.set(key, value));

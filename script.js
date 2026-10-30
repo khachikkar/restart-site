@@ -66,6 +66,27 @@ function renderBanner(banner) {
 
   container.replaceChildren(imageLayer, content);
 
+  function getSlideImageUrl(slide) {
+    const isMobile = window.innerWidth <= 768;
+    const imageUrl = isMobile && slide.mobile_image_url
+      ? slide.mobile_image_url
+      : slide.image_url || slide.mobile_image_url;
+    return optimizedImageUrl(imageUrl);
+  }
+
+  function preloadSlideImage(slide) {
+    document.querySelectorAll('link[data-hero-image-preload="true"]').forEach(link => link.remove());
+    const preload = document.createElement("link");
+    preload.rel = "preload";
+    preload.as = "image";
+    preload.href = getSlideImageUrl(slide);
+    preload.fetchPriority = "high";
+    preload.dataset.heroImagePreload = "true";
+    document.head.appendChild(preload);
+  }
+
+  if (slides.length) preloadSlideImage(slides[0]);
+
   if (slides.length > 1) {
     const controls = document.createElement("div");
     controls.className = "hero-slider-controls";
@@ -88,11 +109,7 @@ function renderBanner(banner) {
     function showSlide(index) {
       activeIndex = (index + slides.length) % slides.length;
       const slide = slides[activeIndex];
-      const isMobile = window.innerWidth <= 768;
-      const imageUrl = isMobile && slide.mobile_image_url
-        ? slide.mobile_image_url
-        : slide.image_url || slide.mobile_image_url;
-      imageLayer.style.backgroundImage = `url("${imageUrl}")`;
+      imageLayer.style.backgroundImage = `url("${getSlideImageUrl(slide)}")`;
 
       slideButtons.forEach((button, buttonIndex) => {
         const isActive = buttonIndex === activeIndex;
@@ -132,11 +149,7 @@ function renderBanner(banner) {
   } else if (slides.length === 1) {
     const slide = slides[0];
     const setImage = () => {
-      const isMobile = window.innerWidth <= 768;
-      const imageUrl = isMobile && slide.mobile_image_url
-        ? slide.mobile_image_url
-        : slide.image_url || slide.mobile_image_url;
-      imageLayer.style.backgroundImage = `url("${imageUrl}")`;
+      imageLayer.style.backgroundImage = `url("${getSlideImageUrl(slide)}")`;
     };
     setImage();
     window.addEventListener("resize", setImage);
@@ -206,7 +219,7 @@ function renderProducts(categoryFilter) {
 
           <div class="product-img-wrapper">
             ${getBadgeHtml(p.badge)}
-            <img src="${p.image_url}" alt="${p.title}" loading="lazy">
+            <img src="${optimizedImageUrl(p.image_url)}" alt="${p.title}" width="1080" height="1400" loading="lazy">
           </div>
 
           ${conditionHtml}
