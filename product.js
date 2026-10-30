@@ -30,41 +30,22 @@ async function loadProductPage() {
     return;
   }
 
-  const mainResponse = await fetch("data.json");
-  if (!mainResponse.ok) {
-    throw new Error(`Could not load data.json: HTTP ${mainResponse.status}`);
-  }
-  const mainData = await mainResponse.json();
-
-  const sectionGroups = await Promise.all(
-    (mainData.product_data_files || []).map(async filePath => {
-      const response = await fetch(filePath);
-      if (!response.ok) {
-        throw new Error(`Could not load ${filePath}: HTTP ${response.status}`);
-      }
-      return response.json();
-    })
-  );
-
-  const productSections = sectionGroups.flat();
-  const productSection = productSections.find(section =>
-    (section.items || []).some(item => String(item.id) === productId)
-  );
-  const product = (productSection?.items || []).find(item => String(item.id) === productId);
+  const catalog = await loadCatalogData();
+  const product = catalog.products.find(item => String(item.id) === productId);
 
   if (!product) {
     renderProductMessage(container, "Այս ID-ով ապրանք չի գտնվել։");
     return;
   }
 
-  const similarProducts = (productSection.items || [])
-    .filter(item => String(item.id) !== productId)
+  const similarProducts = catalog.products
+    .filter(item => item.subcategory === product.subcategory && String(item.id) !== productId)
     .slice(0, 5);
 
   renderProduct(
     container,
     product,
-    mainData.badge_options || {},
+    catalog.badgeOptions,
     similarProducts
   );
   document.title = `${product.title} | Restart`;

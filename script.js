@@ -15,31 +15,10 @@ const conditionLabels = {
 
 async function loadData() {
   try {
-    const jsonUrl = new URL("data.json", window.location.href).href;
-    const response = await fetch(jsonUrl);
+    const data = await loadCatalogData();
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    badgeOptions = data.badge_options || {};
-
-    const productFiles = data.product_data_files || [];
-    const sectionGroups = await Promise.all(
-      productFiles.map(async filePath => {
-        const productResponse = await fetch(new URL(filePath, window.location.href));
-
-        if (!productResponse.ok) {
-          throw new Error(`Could not load ${filePath}: HTTP ${productResponse.status}`);
-        }
-
-        const productData = await productResponse.json();
-        return Array.isArray(productData) ? productData : [productData];
-      })
-    );
-    allSections = sectionGroups.flat();
+    badgeOptions = data.badgeOptions;
+    allSections = data.sections;
 
     renderBanner(data.banner);
     renderProducts("all");
