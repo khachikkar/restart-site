@@ -104,7 +104,16 @@
                 <label for="product-badge">Նշան</label>
                 <select id="product-badge">
                   <option value="">Առանց նշանի</option>
+                  <option value="__custom_discount__">＋ Մանուալ զեղչ (%)</option>
                 </select>
+                <div id="product-discount-fields" class="product-discount-fields" hidden>
+                  <label for="product-discount-percent">Զեղչի տոկոսը</label>
+                  <div class="product-discount-input-wrap">
+                    <input id="product-discount-percent" type="number" min="1" max="99" step="1" inputmode="numeric" placeholder="20">
+                    <span>%</span>
+                  </div>
+                  <small>Մուտքագրիր ամբողջ գինը․ կհաշվեմ զեղչված գինը։</small>
+                </div>
               </div>
               <div>
                 <label for="product-brand">Բրենդ</label>
@@ -186,13 +195,82 @@
         <div class="panel-heading">
           <div>
             <span class="admin-eyebrow">ԳԼԽԱՎՈՐ ԲԱՆՆԵՐ</span>
-            <h2>Բանների նկարներ</h2>
-            <p class="banner-help">Ընտրիր յուրաքանչյուր սլայդի համակարգչային և բջջային նկարը։ Փոփոխությունները կերևան կայքում պահպանումից հետո։</p>
+            <h2>Բանների կարգավորումներ</h2>
+            <p class="banner-help">Կարող ես փոխել սլայդների նկարները, տեքստի ու կոճակի գույները, ինչպես նաև անջատել առանձին բաններներ։</p>
           </div>
+        </div>
+        <div class="banner-text-color-settings banner-copy-settings">
+          <div class="banner-color-field">
+            <label for="banner-title">Գլխավոր տեքստի վերնագիր</label>
+            <input id="banner-title" type="text" maxlength="180" placeholder="Գրիր banner-ի վերնագիրը">
+          </div>
+          <div class="banner-color-field">
+            <label for="banner-description">Գլխավոր տեքստի նկարագրություն</label>
+            <textarea id="banner-description" rows="3" maxlength="400" placeholder="Գրիր banner-ի նկարագրությունը"></textarea>
+          </div>
+          <p class="banner-help">Այս տեքստերը կերևան բոլոր ակտիվ սլայդների վրա։</p>
+        </div>
+        <div class="banner-text-color-settings">
+          <div class="banner-color-field banner-button-text-field">
+            <label for="banner-button-text">Բանների կոճակի տեքստը</label>
+            <input id="banner-button-text" type="text" maxlength="50" placeholder="Տեսնել ապրանքները" autocomplete="off">
+          </div>
+          <p class="banner-help">Այս տեքստը կցուցադրվի բոլոր բանների սլայդների կոճակին։</p>
+        </div>
+        <div class="banner-text-color-settings">
+          <label class="banner-color-toggle" for="banner-text-color-enabled">
+            <input id="banner-text-color-enabled" type="checkbox">
+            <span>Միացնել բանների տեքստի հատուկ գույնը</span>
+          </label>
+          <div id="banner-text-color-fields" class="banner-text-color-fields" hidden>
+            <div class="banner-color-field">
+              <label for="banner-text-color-picker">Ընտրել գույնը</label>
+              <input id="banner-text-color-picker" type="color" value="#ffffff" aria-label="Բանների տեքստի գույնը">
+            </div>
+            <div class="banner-color-field banner-color-code-field">
+              <label for="banner-text-color-code">Կամ գրել գույնի կոդը</label>
+              <input id="banner-text-color-code" type="text" value="#FFFFFF" maxlength="7" placeholder="#FFFFFF" autocomplete="off" spellcheck="false" aria-describedby="banner-text-color-help">
+            </div>
+          </div>
+          <p id="banner-text-color-help" class="banner-help">Գույնը կկիրառվի բանների վերնագրին ու նկարագրությանը՝ բոլոր սլայդներում։ Օրինակ՝ #FFFFFF։</p>
+        </div>
+        <div class="banner-text-color-settings">
+          <label class="banner-color-toggle" for="banner-button-color-enabled">
+            <input id="banner-button-color-enabled" type="checkbox">
+            <span>Միացնել բանների կոճակի հատուկ գույնը</span>
+          </label>
+          <div id="banner-button-color-fields" class="banner-text-color-fields" hidden>
+            <div class="banner-color-field">
+              <label for="banner-button-color-picker">Ընտրել կոճակի գույնը</label>
+              <input id="banner-button-color-picker" type="color" value="#111111" aria-label="Բանների կոճակի գույնը">
+            </div>
+            <div class="banner-color-field banner-color-code-field">
+              <label for="banner-button-color-code">Կամ գրել գույնի կոդը</label>
+              <input id="banner-button-color-code" type="text" value="#111111" maxlength="7" placeholder="#111111" autocomplete="off" spellcheck="false" aria-describedby="banner-button-color-help">
+            </div>
+          </div>
+          <p id="banner-button-color-help" class="banner-help">Գույնը կկիրառվի բանների կոճակի ֆոնին՝ բոլոր սլայդներում։ Տեքստի գույնը կարգավորվում է ներքևում։</p>
+        </div>
+        <div class="banner-text-color-settings">
+          <label class="banner-color-toggle" for="banner-button-text-color-enabled">
+            <input id="banner-button-text-color-enabled" type="checkbox">
+            <span>Միացնել կոճակի տեքստի հատուկ գույնը</span>
+          </label>
+          <div id="banner-button-text-color-fields" class="banner-text-color-fields" hidden>
+            <div class="banner-color-field">
+              <label for="banner-button-text-color-picker">Ընտրել տեքստի գույնը</label>
+              <input id="banner-button-text-color-picker" type="color" value="#ffffff" aria-label="Բանների կոճակի տեքստի գույնը">
+            </div>
+            <div class="banner-color-field banner-color-code-field">
+              <label for="banner-button-text-color-code">Կամ գրել գույնի կոդը</label>
+              <input id="banner-button-text-color-code" type="text" value="#FFFFFF" maxlength="7" placeholder="#FFFFFF" autocomplete="off" spellcheck="false" aria-describedby="banner-button-text-color-help">
+            </div>
+          </div>
+          <p id="banner-button-text-color-help" class="banner-help">Գույնը կկիրառվի կոճակի գրությանը՝ բոլոր սլայդներում։ Օրինակ՝ #FFFFFF։</p>
         </div>
         <div id="banner-editor-list" class="banner-editor-list"></div>
         <div class="admin-form-actions">
-          <button id="save-banners" class="admin-button admin-button-primary" type="button">Պահպանել բանների նկարները</button>
+          <button id="save-banners" class="admin-button admin-button-primary" type="button">Պահպանել բանների կարգավորումները</button>
           <p id="banner-message" class="admin-message" role="status" aria-live="polite"></p>
         </div>
       </section>

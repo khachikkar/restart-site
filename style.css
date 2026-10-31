@@ -276,8 +276,7 @@ body {
     width: 100%;
   max-width: 1200px;
   padding-left: 50px;
-  color: #fff;
- color: #000;
+  color: #000;
   text-align: left;
    margin: 0 auto;
      padding: 0 15px; /* Նույն padding-ը, ինչ .container-ը */
@@ -295,7 +294,16 @@ body {
 .hero-content p {
   font-size: 18px;
   margin-bottom: 25px;
-  color: #000;
+  color: inherit;
+}
+
+.hero-content.has-custom-text-color {
+  color: var(--hero-text-color);
+}
+
+.hero-content.has-custom-text-color h1,
+.hero-content.has-custom-text-color p {
+  color: inherit;
 }
 
 .hero-content .btn-primary {
@@ -311,6 +319,16 @@ body {
 
 .hero-content .btn-primary:hover {
   background: #333;
+}
+
+.hero-content.has-custom-button-color .btn-primary,
+.hero-content.has-custom-button-color .btn-primary:hover {
+  background: var(--hero-button-color);
+}
+
+.hero-content.has-custom-button-text-color .btn-primary,
+.hero-content.has-custom-button-text-color .btn-primary:hover {
+  color: var(--hero-button-text-color);
 }
 
 /* --- PRODUCTS SECTION --- */
@@ -622,7 +640,7 @@ footer {
     width: 100%;
      padding: 25px 15px;
     text-align: center;
-    color: #000 !important;
+    color: #000;
     text-shadow: none !important;
   }
 
@@ -637,6 +655,15 @@ footer {
     font-size: 14px;
     color: #555;
     margin-bottom: 15px;
+  }
+
+  .hero-content.has-custom-text-color {
+    color: var(--hero-text-color);
+  }
+
+  .hero-content.has-custom-text-color h1,
+  .hero-content.has-custom-text-color p {
+    color: inherit;
   }
 
   .hero-content .btn-primary {

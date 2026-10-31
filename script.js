@@ -83,11 +83,12 @@ function renderBanner(banner) {
   const container = document.getElementById("hero-container");
   if (!container || !banner) return;
 
-  const slides = (Array.isArray(banner.slides) ? banner.slides : [])
-    .filter(slide => slide && (slide.image_url || slide.mobile_image_url));
+  const configuredSlides = Array.isArray(banner.slides) ? banner.slides : [];
+  const slides = configuredSlides
+    .filter(slide => slide && slide.enabled !== false && (slide.image_url || slide.mobile_image_url));
 
   // Keep the current banner working for older JSON that has only image_url fields.
-  if (slides.length === 0 && banner.image_url) {
+  if (configuredSlides.length === 0 && banner.image_url) {
     slides.push({
       id: "banner-1",
       image_url: banner.image_url,
@@ -95,17 +96,46 @@ function renderBanner(banner) {
     });
   }
 
+  if (slides.length === 0) {
+    container.replaceChildren();
+    container.hidden = true;
+    return;
+  }
+  container.hidden = false;
+
   const imageLayer = document.createElement("div");
   imageLayer.className = "hero-image";
   imageLayer.setAttribute("aria-hidden", "true");
 
   const content = document.createElement("div");
   content.className = "hero-content";
-  content.innerHTML = `
-    <h1>${banner.title}</h1>
-    <p>${banner.description}</p>
-    <a href="${banner.button_link}" class="btn-primary">${banner.button_text}</a>
-  `;
+  if (banner.custom_text_color_enabled === true && /^#[0-9a-f]{6}$/i.test(banner.text_color || "")) {
+    content.classList.add("has-custom-text-color");
+    content.style.setProperty("--hero-text-color", banner.text_color);
+  }
+  if (banner.custom_button_color_enabled === true && /^#[0-9a-f]{6}$/i.test(banner.button_color || "")) {
+    content.classList.add("has-custom-button-color");
+    content.style.setProperty("--hero-button-color", banner.button_color);
+  }
+  if (banner.custom_button_text_color_enabled === true && /^#[0-9a-f]{6}$/i.test(banner.button_text_color || "")) {
+    content.classList.add("has-custom-button-text-color");
+    content.style.setProperty("--hero-button-text-color", banner.button_text_color);
+  }
+  if (banner.title) {
+    const title = document.createElement("h1");
+    title.textContent = banner.title;
+    content.appendChild(title);
+  }
+  if (banner.description) {
+    const description = document.createElement("p");
+    description.textContent = banner.description;
+    content.appendChild(description);
+  }
+  const button = document.createElement("a");
+  button.href = banner.button_link || "#products";
+  button.className = "btn-primary";
+  button.textContent = banner.button_text || "Տեսնել ապրանքները";
+  content.appendChild(button);
 
   container.replaceChildren(imageLayer, content);
 

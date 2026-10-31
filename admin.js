@@ -18,6 +18,10 @@ const productMessage = document.getElementById("product-message");
 const catalogMessage = document.getElementById("catalog-message");
 const productList = document.getElementById("admin-product-list");
 const badgeSelect = document.getElementById("product-badge");
+const discountFields = document.getElementById("product-discount-fields");
+const discountPercentInput = document.getElementById("product-discount-percent");
+let adminBadgeOptions = {};
+let discountPriceNeedsCalculation = false;
 const brandSelect = document.getElementById("product-brand");
 const brandLogoInput = document.getElementById("product-brand-logo");
 const brandLogoOptions = document.getElementById("brand-logo-options");
@@ -46,6 +50,21 @@ let previewObjectUrl = null;
 let brandLogoPreviewObjectUrl = null;
 let bannerConfig = null;
 const bannerPreviewObjectUrls = new WeakMap();
+const bannerTextColorToggle = document.getElementById("banner-text-color-enabled");
+const bannerTextColorFields = document.getElementById("banner-text-color-fields");
+const bannerTextColorPicker = document.getElementById("banner-text-color-picker");
+const bannerTextColorCode = document.getElementById("banner-text-color-code");
+const bannerButtonColorToggle = document.getElementById("banner-button-color-enabled");
+const bannerButtonColorFields = document.getElementById("banner-button-color-fields");
+const bannerButtonColorPicker = document.getElementById("banner-button-color-picker");
+const bannerButtonColorCode = document.getElementById("banner-button-color-code");
+const bannerButtonTextInput = document.getElementById("banner-button-text");
+const bannerButtonTextColorToggle = document.getElementById("banner-button-text-color-enabled");
+const bannerButtonTextColorFields = document.getElementById("banner-button-text-color-fields");
+const bannerButtonTextColorPicker = document.getElementById("banner-button-text-color-picker");
+const bannerButtonTextColorCode = document.getElementById("banner-button-text-color-code");
+const bannerTitleInput = document.getElementById("banner-title");
+const bannerDescriptionInput = document.getElementById("banner-description");
 
 function syncBrandSelection(brandName) {
   const addingNewBrand = brandName === "__new__";
@@ -160,10 +179,55 @@ function formatPriceWithDram(value) {
   return amount ? `${amount} դր` : "";
 }
 
+function showDiscountFields() {
+  discountFields.hidden = badgeSelect.value !== "__custom_discount__";
+}
+
+function parsePriceAmount(value) {
+  const digits = String(value ?? "").replace(/\D/g, "");
+  return digits ? Number(digits) : 0;
+}
+
+function formatPriceAmount(value) {
+  return `${new Intl.NumberFormat("en-US").format(value)} դր`;
+}
+
+badgeSelect.addEventListener("change", () => {
+  showDiscountFields();
+  discountPriceNeedsCalculation = badgeSelect.value === "__custom_discount__";
+});
+discountPercentInput.addEventListener("input", () => {
+  discountPriceNeedsCalculation = badgeSelect.value === "__custom_discount__";
+});
+document.getElementById("product-price").addEventListener("input", () => {
+  discountPriceNeedsCalculation = badgeSelect.value === "__custom_discount__";
+});
+showDiscountFields();
+
 [document.getElementById("product-price"), document.getElementById("product-old-price")].forEach(input => {
   input.addEventListener("blur", () => {
     if (input.value.trim()) input.value = formatPriceWithDram(input.value);
   });
+});
+
+document.getElementById("product-price").addEventListener("blur", event => {
+  if (badgeSelect.value !== "__custom_discount__" || !discountPriceNeedsCalculation) return;
+  discountPriceNeedsCalculation = false;
+
+  const percent = Number(discountPercentInput.value);
+  const oldPrice = parsePriceAmount(event.currentTarget.value);
+  if (!Number.isInteger(percent) || percent < 1 || percent > 99 || oldPrice <= 0) return;
+
+  const newPrice = Math.round(oldPrice * (100 - percent) / 100);
+  const oldPriceText = formatPriceAmount(oldPrice);
+  const newPriceText = formatPriceAmount(newPrice);
+  const approved = window.confirm(
+    `Հաշվարկել -${percent}% զեղչը՞\n\nՀին գին՝ ${oldPriceText}\nՆոր գին՝ ${newPriceText}\n\nՀաստատելու դեպքում այս գները կլրացվեն դաշտերում։`
+  );
+
+  if (!approved) return;
+  document.getElementById("product-old-price").value = oldPriceText;
+  event.currentTarget.value = newPriceText;
 });
 
 function showScreen(screen) {
@@ -231,7 +295,10 @@ async function loadBadges() {
 
   if (error || !data?.value) return;
 
+  adminBadgeOptions = data.value;
+
   Object.entries(data.value).forEach(([key, badge]) => {
+    if (badgeSelect.querySelector(`option[value="${key}"]`)) return;
     const option = document.createElement("option");
     option.value = key;
     option.textContent = badge.text || key;
@@ -258,6 +325,30 @@ async function loadBannerSettings() {
 function renderBannerEditors() {
   const editorList = document.getElementById("banner-editor-list");
   editorList.replaceChildren();
+  bannerTitleInput.value = bannerConfig?.title || "";
+  bannerDescriptionInput.value = bannerConfig?.description || "";
+  bannerButtonTextInput.value = bannerConfig?.button_text || "Տեսնել ապրանքները";
+  const savedColor = /^#[0-9a-f]{6}$/i.test(bannerConfig?.text_color || "")
+    ? bannerConfig.text_color
+    : "#FFFFFF";
+  bannerTextColorToggle.checked = bannerConfig?.custom_text_color_enabled === true;
+  bannerTextColorPicker.value = savedColor;
+  bannerTextColorCode.value = savedColor.toUpperCase();
+  updateBannerTextColorFields();
+  const savedButtonColor = /^#[0-9a-f]{6}$/i.test(bannerConfig?.button_color || "")
+    ? bannerConfig.button_color
+    : "#111111";
+  bannerButtonColorToggle.checked = bannerConfig?.custom_button_color_enabled === true;
+  bannerButtonColorPicker.value = savedButtonColor;
+  bannerButtonColorCode.value = savedButtonColor.toUpperCase();
+  updateBannerButtonColorFields();
+  const savedButtonTextColor = /^#[0-9a-f]{6}$/i.test(bannerConfig?.button_text_color || "")
+    ? bannerConfig.button_text_color
+    : "#FFFFFF";
+  bannerButtonTextColorToggle.checked = bannerConfig?.custom_button_text_color_enabled === true;
+  bannerButtonTextColorPicker.value = savedButtonTextColor;
+  bannerButtonTextColorCode.value = savedButtonTextColor.toUpperCase();
+  updateBannerButtonTextColorFields();
   const slides = Array.isArray(bannerConfig?.slides) ? bannerConfig.slides : [];
 
   if (!slides.length) {
@@ -272,7 +363,20 @@ function renderBannerEditors() {
 
     const heading = document.createElement("h3");
     heading.textContent = slide.id || `Banner ${index + 1}`;
+    if (slide.enabled === false) card.classList.add("is-disabled");
     card.appendChild(heading);
+
+    const visibilityLabel = document.createElement("label");
+    visibilityLabel.className = "banner-slide-visibility";
+    const visibilityInput = document.createElement("input");
+    visibilityInput.type = "checkbox";
+    visibilityInput.className = "banner-slide-enabled";
+    visibilityInput.checked = slide.enabled !== false;
+    visibilityInput.setAttribute("aria-label", `${heading.textContent} ցուցադրել կայքում`);
+    const visibilityText = document.createElement("span");
+    visibilityText.textContent = "Ցուցադրել կայքում";
+    visibilityLabel.append(visibilityInput, visibilityText);
+    card.appendChild(visibilityLabel);
 
     [
       { key: "image_url", label: "Համակարգչի նկար", mobile: false },
@@ -298,6 +402,33 @@ function renderBannerEditors() {
 
     editorList.appendChild(card);
   });
+}
+
+function updateBannerTextColorFields() {
+  const enabled = bannerTextColorToggle.checked;
+  bannerTextColorFields.hidden = !enabled;
+  bannerTextColorPicker.disabled = !enabled;
+  bannerTextColorCode.disabled = !enabled;
+}
+
+function updateBannerButtonColorFields() {
+  const enabled = bannerButtonColorToggle.checked;
+  bannerButtonColorFields.hidden = !enabled;
+  bannerButtonColorPicker.disabled = !enabled;
+  bannerButtonColorCode.disabled = !enabled;
+}
+
+function updateBannerButtonTextColorFields() {
+  const enabled = bannerButtonTextColorToggle.checked;
+  bannerButtonTextColorFields.hidden = !enabled;
+  bannerButtonTextColorPicker.disabled = !enabled;
+  bannerButtonTextColorCode.disabled = !enabled;
+}
+
+function normalizeBannerTextColor(value) {
+  const trimmed = value.trim();
+  const normalized = trimmed.startsWith("#") ? trimmed : `#${trimmed}`;
+  return /^#[0-9a-f]{6}$/i.test(normalized) ? normalized.toUpperCase() : "";
 }
 
 async function uploadAdminImage(file, pathPrefix) {
@@ -397,6 +528,9 @@ function resetProductForm() {
   document.getElementById("product-condition").value = "new";
   document.getElementById("product-category").value = "washing";
   document.getElementById("product-badge").value = "";
+  discountPercentInput.value = "";
+  discountPriceNeedsCalculation = false;
+  showDiscountFields();
   syncBrandSelection("");
   document.getElementById("editor-heading").textContent = "Ավելացնել ապրանք";
   document.getElementById("save-product").textContent = "Պահպանել ապրանքը";
@@ -414,7 +548,11 @@ function beginEdit(product) {
   document.getElementById("product-price").value = product.price;
   document.getElementById("product-old-price").value = product.old_price || "";
   document.getElementById("product-condition").value = product.condition || "new";
-  document.getElementById("product-badge").value = product.badge || "";
+  const savedDiscountMatch = String(product.badge || "").match(/^discount_(\d{1,2})$/);
+  document.getElementById("product-badge").value = savedDiscountMatch ? "__custom_discount__" : (product.badge || "");
+  discountPercentInput.value = savedDiscountMatch?.[1] || "";
+  discountPriceNeedsCalculation = false;
+  showDiscountFields();
   syncBrandSelection(product.brand || "");
   document.getElementById("product-image").value = product.image_url;
   document.getElementById("editor-heading").textContent = "Խմբագրել ապրանքը";
@@ -438,6 +576,14 @@ async function saveProduct(event) {
   const newBrandName = newBrandNameInput.value.trim();
   const existing = products.find(product => product.id === id);
   const existingImageUrl = document.getElementById("product-image").value.trim();
+  const badgeSelection = badgeSelect.value;
+  const discountPercent = Number(discountPercentInput.value);
+
+  if (badgeSelection === "__custom_discount__" && (!Number.isInteger(discountPercent) || discountPercent < 1 || discountPercent > 99)) {
+    setMessage(productMessage, "Մուտքագրիր զեղչի տոկոսը՝ 1-ից 99։", "error");
+    saveButton.disabled = false;
+    return;
+  }
 
   if (isAddingNewBrand) {
     if (!newBrandName || newBrandName === "__new__") {
@@ -494,11 +640,39 @@ async function saveProduct(event) {
     price: formatPriceWithDram(document.getElementById("product-price").value),
     old_price: formatPriceWithDram(document.getElementById("product-old-price").value),
     image_url: imageUrl,
-    badge: document.getElementById("product-badge").value || null,
+    badge: badgeSelection === "__custom_discount__" ? `discount_${discountPercent}` : (badgeSelection || null),
     brand: brandName || null,
     brand_logo: brandLogoUrl,
     condition: document.getElementById("product-condition").value
   };
+
+  if (badgeSelection === "__custom_discount__") {
+    const badgeKey = `discount_${discountPercent}`;
+    const badgeText = `-${discountPercent}%`;
+    const nextBadgeOptions = {
+      ...adminBadgeOptions,
+      [badgeKey]: { ...(adminBadgeOptions[badgeKey] || {}), text: badgeText, bg_color: adminBadgeOptions[badgeKey]?.bg_color || "#fd7e14" }
+    };
+    const { error: badgeError } = await supabaseClient
+      .from("site_config")
+      .update({ value: nextBadgeOptions })
+      .eq("key", "badge_options");
+
+    if (badgeError) {
+      saveButton.disabled = false;
+      setMessage(productMessage, `Չհաջողվեց պահպանել նշանը․ ${badgeError.message}`, "error");
+      return;
+    }
+
+    adminBadgeOptions = nextBadgeOptions;
+    if (!badgeSelect.querySelector(`option[value="${badgeKey}"]`)) {
+      const option = document.createElement("option");
+      option.value = badgeKey;
+      badgeSelect.insertBefore(option, badgeSelect.querySelector('option[value="__custom_discount__"]'));
+    }
+    const savedBadgeOption = badgeSelect.querySelector(`option[value="${badgeKey}"]`);
+    savedBadgeOption.textContent = badgeText;
+  }
 
   const result = isEditing
     ? await supabaseClient.from("products").update(payload).eq("id", id)
@@ -541,15 +715,61 @@ async function saveBannerImages() {
     return;
   }
 
+  const customTextColorEnabled = bannerTextColorToggle.checked;
+  const normalizedTextColor = normalizeBannerTextColor(bannerTextColorCode.value);
+  const customButtonColorEnabled = bannerButtonColorToggle.checked;
+  const normalizedButtonColor = normalizeBannerTextColor(bannerButtonColorCode.value);
+  const customButtonTextColorEnabled = bannerButtonTextColorToggle.checked;
+  const normalizedButtonTextColor = normalizeBannerTextColor(bannerButtonTextColorCode.value);
+  const bannerTitle = bannerTitleInput.value.trim();
+  const bannerDescription = bannerDescriptionInput.value.trim();
+  const buttonText = bannerButtonTextInput.value.trim();
+  if (!bannerTitle) {
+    setMessage(message, "Գրիր banner-ի գլխավոր վերնագիրը։", "error");
+    bannerTitleInput.focus();
+    return;
+  }
+  if (!buttonText) {
+    setMessage(message, "Գրիր banner-ի կոճակի տեքստը։", "error");
+    bannerButtonTextInput.focus();
+    return;
+  }
+  if (customTextColorEnabled && !normalizedTextColor) {
+    setMessage(message, "Գրիր գույնի ճիշտ HEX կոդ, օրինակ՝ #FFFFFF։", "error");
+    bannerTextColorCode.focus();
+    return;
+  }
+  if (customButtonColorEnabled && !normalizedButtonColor) {
+    setMessage(message, "Գրիր կոճակի գույնի ճիշտ HEX կոդ, օրինակ՝ #111111։", "error");
+    bannerButtonColorCode.focus();
+    return;
+  }
+  if (customButtonTextColorEnabled && !normalizedButtonTextColor) {
+    setMessage(message, "Գրիր կոճակի տեքստի ճիշտ HEX կոդ, օրինակ՝ #FFFFFF։", "error");
+    bannerButtonTextColorCode.focus();
+    return;
+  }
+
   button.disabled = true;
-  setMessage(message, "Նկարները պահվում են…");
+  setMessage(message, "Բանների կարգավորումները պահվում են…");
   const updatedBanner = JSON.parse(JSON.stringify(bannerConfig));
+  updatedBanner.title = bannerTitle;
+  updatedBanner.description = bannerDescription;
+  updatedBanner.custom_text_color_enabled = customTextColorEnabled;
+  if (normalizedTextColor) updatedBanner.text_color = normalizedTextColor;
+  updatedBanner.custom_button_color_enabled = customButtonColorEnabled;
+  if (normalizedButtonColor) updatedBanner.button_color = normalizedButtonColor;
+  updatedBanner.custom_button_text_color_enabled = customButtonTextColorEnabled;
+  if (normalizedButtonTextColor) updatedBanner.button_text_color = normalizedButtonTextColor;
+  updatedBanner.button_text = buttonText;
 
   try {
     for (const card of document.querySelectorAll(".banner-slide-editor")) {
       const index = Number(card.dataset.slideIndex);
       const slide = updatedBanner.slides[index];
       const slideName = slide.id || `banner-${index + 1}`;
+      const visibilityInput = card.querySelector(".banner-slide-enabled");
+      slide.enabled = visibilityInput ? visibilityInput.checked : slide.enabled !== false;
       for (const input of card.querySelectorAll(".banner-file-input")) {
         const file = input.files?.[0];
         if (!file) continue;
@@ -571,7 +791,7 @@ async function saveBannerImages() {
     if (error) throw error;
     bannerConfig = updatedBanner;
     renderBannerEditors();
-    setMessage(message, "Բանների նկարները պահպանվեցին։ Կայքը կցուցադրի նոր նկարները թարմացումից հետո։", "success");
+    setMessage(message, "Բանների կարգավորումները պահպանվեցին։", "success");
   } catch (error) {
     setMessage(message, `Չհաջողվեց պահպանել բանները․ ${error.message}`, "error");
   } finally {
@@ -636,8 +856,46 @@ document.getElementById("cancel-edit").addEventListener("click", resetProductFor
 document.getElementById("catalog-filter").addEventListener("change", renderProductList);
 productForm.addEventListener("submit", saveProduct);
 document.getElementById("save-banners").addEventListener("click", saveBannerImages);
+bannerTitleInput.addEventListener("input", () => setMessage(document.getElementById("banner-message")));
+bannerDescriptionInput.addEventListener("input", () => setMessage(document.getElementById("banner-message")));
+bannerButtonTextInput.addEventListener("input", () => setMessage(document.getElementById("banner-message")));
+bannerTextColorToggle.addEventListener("change", updateBannerTextColorFields);
+bannerButtonColorToggle.addEventListener("change", updateBannerButtonColorFields);
+bannerButtonTextColorToggle.addEventListener("change", updateBannerButtonTextColorFields);
+bannerTextColorPicker.addEventListener("input", () => {
+  bannerTextColorCode.value = bannerTextColorPicker.value.toUpperCase();
+  setMessage(document.getElementById("banner-message"));
+});
+bannerTextColorCode.addEventListener("input", () => {
+  const normalized = normalizeBannerTextColor(bannerTextColorCode.value);
+  if (normalized) bannerTextColorPicker.value = normalized;
+  setMessage(document.getElementById("banner-message"));
+});
+bannerButtonColorPicker.addEventListener("input", () => {
+  bannerButtonColorCode.value = bannerButtonColorPicker.value.toUpperCase();
+  setMessage(document.getElementById("banner-message"));
+});
+bannerButtonColorCode.addEventListener("input", () => {
+  const normalized = normalizeBannerTextColor(bannerButtonColorCode.value);
+  if (normalized) bannerButtonColorPicker.value = normalized;
+  setMessage(document.getElementById("banner-message"));
+});
+bannerButtonTextColorPicker.addEventListener("input", () => {
+  bannerButtonTextColorCode.value = bannerButtonTextColorPicker.value.toUpperCase();
+  setMessage(document.getElementById("banner-message"));
+});
+bannerButtonTextColorCode.addEventListener("input", () => {
+  const normalized = normalizeBannerTextColor(bannerButtonTextColorCode.value);
+  if (normalized) bannerButtonTextColorPicker.value = normalized;
+  setMessage(document.getElementById("banner-message"));
+});
 document.getElementById("banner-editor-list").addEventListener("change", event => {
   const input = event.target;
+  if (input.matches(".banner-slide-enabled")) {
+    input.closest(".banner-slide-editor")?.classList.toggle("is-disabled", !input.checked);
+    setMessage(document.getElementById("banner-message"));
+    return;
+  }
   if (!input.matches(".banner-file-input")) return;
 
   const file = input.files?.[0];
