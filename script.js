@@ -13,6 +13,15 @@ const conditionLabels = {
   used: "Օգտագործված"
 };
 
+const defaultBrandLogos = [
+  { name: "Samsung", logo: "assets/brands/samsung.svg" },
+  { name: "LG", logo: "assets/brands/lg.svg" },
+  { name: "Beko", logo: "assets/brands/beko.svg" },
+  { name: "Electrolux", logo: "assets/brands/electrolux.svg" },
+  { name: "Hisense", logo: "assets/brands/hisense.svg" },
+  { name: "Indesit", logo: "assets/brands/indesit.svg" }
+];
+
 async function loadData() {
   try {
     const data = await loadCatalogData();
@@ -21,10 +30,44 @@ async function loadData() {
     allSections = data.sections;
 
     renderBanner(data.banner);
+    renderBrandMarquee(data.products);
     renderProducts("all");
   } catch (error) {
     console.error("Error loading data.json:", error);
   }
+}
+
+function renderBrandMarquee(products = []) {
+  const track = document.getElementById("brand-track");
+  if (!track) return;
+
+  const brands = new Map(defaultBrandLogos.map(brand => [brand.name.toLocaleLowerCase(), brand]));
+  products.forEach(product => {
+    const name = typeof product.brand === "string" ? product.brand.trim() : "";
+    const logo = typeof product.brand_logo === "string" ? product.brand_logo.trim() : "";
+    const key = name.toLocaleLowerCase();
+    if (name && logo && !brands.has(key)) brands.set(key, { name, logo });
+  });
+
+  const createBrandSet = (hidden = false) => {
+    const brandSet = document.createElement("div");
+    brandSet.className = "brand-set";
+    if (hidden) brandSet.setAttribute("aria-hidden", "true");
+
+    brands.forEach(brand => {
+      const image = document.createElement("img");
+      image.className = "brand-logo";
+      image.src = brand.logo;
+      image.alt = hidden ? "" : brand.name;
+      image.loading = "eager";
+      image.decoding = "async";
+      brandSet.appendChild(image);
+    });
+
+    return brandSet;
+  };
+
+  track.replaceChildren(createBrandSet(), createBrandSet(true));
 }
 
 // Մոբայլ մենյուի բացման / փակման ֆունկցիա
@@ -241,12 +284,83 @@ function renderProducts(categoryFilter) {
         </a>
       `;
 
+      const shareButton = document.createElement("button");
+      shareButton.className = "product-card-share";
+      shareButton.type = "button";
+      shareButton.setAttribute("aria-label", `Կիսվել՝ ${p.title}`);
+      shareButton.title = "Կիսվել ապրանքով";
+      shareButton.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">share</span>';
+      shareButton.addEventListener("click", () => shareProduct(p, shareButton));
+      card.appendChild(shareButton);
+
       grid.appendChild(card);
     });
 
     groupDiv.appendChild(grid);
     container.appendChild(groupDiv);
   });
+}
+
+async function shareProduct(product, button) {
+  const productUrl = new URL(`product.html?id=${encodeURIComponent(product.id)}`, window.location.href).href;
+  const shareData = {
+    title: product.title,
+    text: `${product.title} — ${product.price}`,
+    url: productUrl
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+      return;
+    }
+    await copyProductLink(productUrl);
+    showProductLinkCopied(button);
+  } catch (error) {
+    if (error.name === "AbortError") return;
+    try {
+      await copyProductLink(productUrl);
+      showProductLinkCopied(button);
+    } catch (copyError) {
+      button.title = "Հղումը չհաջողվեց պատճենել";
+      button.setAttribute("aria-label", "Հղումը չհաջողվեց պատճենել");
+      window.setTimeout(() => resetProductShareButton(button), 2000);
+    }
+  }
+}
+
+async function copyProductLink(url) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(url);
+    return;
+  }
+
+  const input = document.createElement("textarea");
+  input.value = url;
+  input.setAttribute("readonly", "");
+  input.style.position = "fixed";
+  input.style.opacity = "0";
+  document.body.appendChild(input);
+  input.select();
+  const copied = document.execCommand("copy");
+  input.remove();
+  if (!copied) throw new Error("Could not copy product link");
+}
+
+function showProductLinkCopied(button) {
+  const icon = button.querySelector(".material-symbols-outlined");
+  if (icon) icon.textContent = "check";
+  button.title = "Հղումը պատճենվեց";
+  button.setAttribute("aria-label", "Հղումը պատճենվեց");
+  window.clearTimeout(button.shareResetTimer);
+  button.shareResetTimer = window.setTimeout(() => resetProductShareButton(button), 1800);
+}
+
+function resetProductShareButton(button) {
+  const icon = button.querySelector(".material-symbols-outlined");
+  if (icon) icon.textContent = "share";
+  button.title = "Կիսվել ապրանքով";
+  button.setAttribute("aria-label", "Կիսվել ապրանքով");
 }
 
 function filterCategory(category, event) {
