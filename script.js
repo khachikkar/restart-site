@@ -113,6 +113,10 @@ function renderBanner(banner) {
     content.classList.add("has-custom-text-color");
     content.style.setProperty("--hero-text-color", banner.text_color);
   }
+  if (banner.custom_mobile_text_color_enabled === true && /^#[0-9a-f]{6}$/i.test(banner.mobile_text_color || "")) {
+    content.classList.add("has-custom-mobile-text-color");
+    content.style.setProperty("--hero-mobile-text-color", banner.mobile_text_color);
+  }
   if (banner.custom_button_color_enabled === true && /^#[0-9a-f]{6}$/i.test(banner.button_color || "")) {
     content.classList.add("has-custom-button-color");
     content.style.setProperty("--hero-button-color", banner.button_color);

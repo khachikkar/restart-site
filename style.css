@@ -666,6 +666,12 @@ footer {
     color: inherit;
   }
 
+  .hero-content.has-custom-mobile-text-color,
+  .hero-content.has-custom-mobile-text-color h1,
+  .hero-content.has-custom-mobile-text-color p {
+    color: var(--hero-mobile-text-color);
+  }
+
   .hero-content .btn-primary {
     background: #111;
     color: #fff;

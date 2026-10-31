@@ -54,6 +54,10 @@ const bannerTextColorToggle = document.getElementById("banner-text-color-enabled
 const bannerTextColorFields = document.getElementById("banner-text-color-fields");
 const bannerTextColorPicker = document.getElementById("banner-text-color-picker");
 const bannerTextColorCode = document.getElementById("banner-text-color-code");
+const bannerMobileTextColorToggle = document.getElementById("banner-mobile-text-color-enabled");
+const bannerMobileTextColorFields = document.getElementById("banner-mobile-text-color-fields");
+const bannerMobileTextColorPicker = document.getElementById("banner-mobile-text-color-picker");
+const bannerMobileTextColorCode = document.getElementById("banner-mobile-text-color-code");
 const bannerButtonColorToggle = document.getElementById("banner-button-color-enabled");
 const bannerButtonColorFields = document.getElementById("banner-button-color-fields");
 const bannerButtonColorPicker = document.getElementById("banner-button-color-picker");
@@ -335,6 +339,13 @@ function renderBannerEditors() {
   bannerTextColorPicker.value = savedColor;
   bannerTextColorCode.value = savedColor.toUpperCase();
   updateBannerTextColorFields();
+  const savedMobileColor = /^#[0-9a-f]{6}$/i.test(bannerConfig?.mobile_text_color || "")
+    ? bannerConfig.mobile_text_color
+    : "#FFFFFF";
+  bannerMobileTextColorToggle.checked = bannerConfig?.custom_mobile_text_color_enabled === true;
+  bannerMobileTextColorPicker.value = savedMobileColor;
+  bannerMobileTextColorCode.value = savedMobileColor.toUpperCase();
+  updateBannerMobileTextColorFields();
   const savedButtonColor = /^#[0-9a-f]{6}$/i.test(bannerConfig?.button_color || "")
     ? bannerConfig.button_color
     : "#111111";
@@ -409,6 +420,13 @@ function updateBannerTextColorFields() {
   bannerTextColorFields.hidden = !enabled;
   bannerTextColorPicker.disabled = !enabled;
   bannerTextColorCode.disabled = !enabled;
+}
+
+function updateBannerMobileTextColorFields() {
+  const enabled = bannerMobileTextColorToggle.checked;
+  bannerMobileTextColorFields.hidden = !enabled;
+  bannerMobileTextColorPicker.disabled = !enabled;
+  bannerMobileTextColorCode.disabled = !enabled;
 }
 
 function updateBannerButtonColorFields() {
@@ -717,6 +735,8 @@ async function saveBannerImages() {
 
   const customTextColorEnabled = bannerTextColorToggle.checked;
   const normalizedTextColor = normalizeBannerTextColor(bannerTextColorCode.value);
+  const customMobileTextColorEnabled = bannerMobileTextColorToggle.checked;
+  const normalizedMobileTextColor = normalizeBannerTextColor(bannerMobileTextColorCode.value);
   const customButtonColorEnabled = bannerButtonColorToggle.checked;
   const normalizedButtonColor = normalizeBannerTextColor(bannerButtonColorCode.value);
   const customButtonTextColorEnabled = bannerButtonTextColorToggle.checked;
@@ -739,6 +759,11 @@ async function saveBannerImages() {
     bannerTextColorCode.focus();
     return;
   }
+  if (customMobileTextColorEnabled && !normalizedMobileTextColor) {
+    setMessage(message, "Գրիր բջջայինի գույնի ճիշտ HEX կոդ, օրինակ՝ #FFFFFF։", "error");
+    bannerMobileTextColorCode.focus();
+    return;
+  }
   if (customButtonColorEnabled && !normalizedButtonColor) {
     setMessage(message, "Գրիր կոճակի գույնի ճիշտ HEX կոդ, օրինակ՝ #111111։", "error");
     bannerButtonColorCode.focus();
@@ -757,6 +782,8 @@ async function saveBannerImages() {
   updatedBanner.description = bannerDescription;
   updatedBanner.custom_text_color_enabled = customTextColorEnabled;
   if (normalizedTextColor) updatedBanner.text_color = normalizedTextColor;
+  updatedBanner.custom_mobile_text_color_enabled = customMobileTextColorEnabled;
+  if (normalizedMobileTextColor) updatedBanner.mobile_text_color = normalizedMobileTextColor;
   updatedBanner.custom_button_color_enabled = customButtonColorEnabled;
   if (normalizedButtonColor) updatedBanner.button_color = normalizedButtonColor;
   updatedBanner.custom_button_text_color_enabled = customButtonTextColorEnabled;
@@ -860,6 +887,7 @@ bannerTitleInput.addEventListener("input", () => setMessage(document.getElementB
 bannerDescriptionInput.addEventListener("input", () => setMessage(document.getElementById("banner-message")));
 bannerButtonTextInput.addEventListener("input", () => setMessage(document.getElementById("banner-message")));
 bannerTextColorToggle.addEventListener("change", updateBannerTextColorFields);
+bannerMobileTextColorToggle.addEventListener("change", updateBannerMobileTextColorFields);
 bannerButtonColorToggle.addEventListener("change", updateBannerButtonColorFields);
 bannerButtonTextColorToggle.addEventListener("change", updateBannerButtonTextColorFields);
 bannerTextColorPicker.addEventListener("input", () => {
@@ -869,6 +897,15 @@ bannerTextColorPicker.addEventListener("input", () => {
 bannerTextColorCode.addEventListener("input", () => {
   const normalized = normalizeBannerTextColor(bannerTextColorCode.value);
   if (normalized) bannerTextColorPicker.value = normalized;
+  setMessage(document.getElementById("banner-message"));
+});
+bannerMobileTextColorPicker.addEventListener("input", () => {
+  bannerMobileTextColorCode.value = bannerMobileTextColorPicker.value.toUpperCase();
+  setMessage(document.getElementById("banner-message"));
+});
+bannerMobileTextColorCode.addEventListener("input", () => {
+  const normalized = normalizeBannerTextColor(bannerMobileTextColorCode.value);
+  if (normalized) bannerMobileTextColorPicker.value = normalized;
   setMessage(document.getElementById("banner-message"));
 });
 bannerButtonColorPicker.addEventListener("input", () => {

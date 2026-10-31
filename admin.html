@@ -235,6 +235,23 @@
           <p id="banner-text-color-help" class="banner-help">Գույնը կկիրառվի բանների վերնագրին ու նկարագրությանը՝ բոլոր սլայդներում։ Օրինակ՝ #FFFFFF։</p>
         </div>
         <div class="banner-text-color-settings">
+          <label class="banner-color-toggle" for="banner-mobile-text-color-enabled">
+            <input id="banner-mobile-text-color-enabled" type="checkbox">
+            <span>Բջջայինում օգտագործել առանձին տեքստի գույն</span>
+          </label>
+          <div id="banner-mobile-text-color-fields" class="banner-text-color-fields" hidden>
+            <div class="banner-color-field">
+              <label for="banner-mobile-text-color-picker">Բջջայինի տեքստի գույնը</label>
+              <input id="banner-mobile-text-color-picker" type="color" value="#ffffff" aria-label="Բանների բջջային տեքստի գույնը">
+            </div>
+            <div class="banner-color-field banner-color-code-field">
+              <label for="banner-mobile-text-color-code">Կամ գրել գույնի կոդը</label>
+              <input id="banner-mobile-text-color-code" type="text" value="#FFFFFF" maxlength="7" placeholder="#FFFFFF" autocomplete="off" spellcheck="false" aria-describedby="banner-mobile-text-color-help">
+            </div>
+          </div>
+          <p id="banner-mobile-text-color-help" class="banner-help">Այս գույնը կերևա միայն բջջային տարբերակում՝ բանների վերնագրի և նկարագրության վրա։ Օրինակ՝ #FFFFFF։</p>
+        </div>
+        <div class="banner-text-color-settings">
           <label class="banner-color-toggle" for="banner-button-color-enabled">
             <input id="banner-button-color-enabled" type="checkbox">
             <span>Միացնել բանների կոճակի հատուկ գույնը</span>
